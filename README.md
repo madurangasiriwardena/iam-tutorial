@@ -32,7 +32,7 @@ Integrating a B2B Saas app with WSO2 Identity Server and serving self serviced a
 - Configuring login and access policies per customer organization
 - Support for customers’ branding
 - Let customers to selectively subscribe to apps
-- Organization hierarchies
+- Modelling reseller/partner usecases with organization hierarchies
 
 ## Prerequisites
 The following prerequisites are needed to try out the tutorial samples

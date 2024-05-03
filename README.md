@@ -22,6 +22,8 @@ In this tutorial, we will explore the following with a suite of applications tha
  - Integrate with Salesforce
 
 2. Providing a native access experience for a mobile application still adhering to best security practices using the In-App Authentication API
+   
+   <img width="800" alt="Screenshot 2024-05-03 at 3 59 01 PM" src="https://github.com/wso2con2024/iam-tutorial/assets/4951983/f65cab54-f319-4356-a66f-2d21ab0ae08d">
 
 **CIAM for B2B Customer facing applications**
 

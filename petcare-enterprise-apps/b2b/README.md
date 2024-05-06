@@ -3,20 +3,19 @@
 ## Prerequisites:
 1. Install Ballerina 2201.5.0 https://dist.ballerina.io/downloads/2201.5.0/ballerina-2201.5.0-swan-lake-macos-arm-x64.pkg
 2. Install Node 16 LTS (Tested in v16.13.0).
-3. Clone https://github.com/wso2/samples-is and the sample will be in the petcare-sample directory.
 
 ## Deploy API Services
-1. Navigate to <PROJECT_HOME>/petcare-sample/b2b/web-app/petvet/apis/ballerina/channel-service and start the channel 
+1. Navigate to <PROJECT_HOME>/petcare-enterprise-apps/b2b/apis/channel-service and start the channel 
    service by executing the following command in the terminal.
     ```
     bal run
     ```
-2. Navigate to <PROJECT_HOME/>petcare-sample/b2b/web-app/petvet/apis/ballerina/pet-management-service and start the 
+2. Navigate to <PROJECT_HOME>/petcare-enterprise-apps/b2b/apis/pet-management-service and start the 
    pet management service by executing the following command in the terminal.
     ```
     bal run
     ```
-3. Navigate to <PROJECT_HOME>/petcare-sample/b2b/web-app/petvet/apis/ballerina/personalization-service and start 
+3. Navigate to <PROJECT_HOME>/petcare-enterprise-apps/b2b/apis/personalization-service and start 
    the personalization service by executing the following command in the terminal.
     ```
     bal run
@@ -43,14 +42,14 @@ dbPort = "<DB_PORT>"
 2. Set the following properties. 
    1. Navigate to `Design` Tab, expand the `Images` and add the following URL as the Logo URL.
       ```
-      https://user-images.githubusercontent.com/35829027/241967420-9358bd5c-636e-48a1-a2d8-27b2aa310ebf.png
+      https://github.com/wso2/samples-is/assets/27746285/9b37d814-dcb8-4838-8435-603ef9ee88ed
       ```
    2. Add the `Logo Alt Text` as `Pet Care App Logo`.
    3. Add the `Favicon URL` as 
       ```
-      https://user-images.githubusercontent.com/1329596/242288450-b511d3dd-5e02-434f-9924-3399990fa011.png
+      https://github.com/wso2/samples-is/assets/27746285/b11e7c0e-64b5-4028-a884-2d24fe4a6ed2
       ```
-   4. Expand the `Color Palette` and add `#4f40ee` as the `Primary Color`.
+   4. Expand the `Color Palette` and add `#69a2f4` as the `Primary Color`.
 
 ## Create API Resources
 1. Switch back to the primary organization and navigate to the API Resources section.

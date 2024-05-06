@@ -73,6 +73,8 @@ service / on new http:Listener(9092) {
             return owner;
         }
         
+        io:println("Owner : ", owner);
+        io:println("Email : ", payload.email);
         string sampleQuery = string `SELECT AccountID FROM Contact WHERE Email = '${payload.email ?: ""}'`;
         stream<record {}, error?> queryResults = check baseClient->query(sampleQuery);
         
@@ -85,8 +87,11 @@ service / on new http:Listener(9092) {
             };
 
         if (nLines != 0) {
+            io:println("Account already created. Account ID : ", recordId);
             return http:CREATED;
         }
+
+        io:println("Account not found for the email : ", payload.email);
 
         sampleQuery = string `SELECT Id FROM Lead WHERE Email = '${payload.email ?: ""}'`;
         queryResults = check baseClient->query(sampleQuery);
@@ -99,10 +104,13 @@ service / on new http:Listener(9092) {
             };
 
         if (nLines2 == 0) {
+            io:println("Lead not found for the email : ", payload.email);
             return http:NOT_FOUND;
         }
         
+        io:println("Lead found for the email : ", payload.email);
         soap:ConvertedLead _ = check soapClient->convertLead({leadId: recordId, convertedStatus: "Closed - Converted"});
+        io:println("Lead converted.");
         return http:CREATED;
     }
 }

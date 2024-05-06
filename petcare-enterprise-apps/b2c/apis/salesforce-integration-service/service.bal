@@ -75,35 +75,19 @@ service / on new http:Listener(9092) {
         
         io:println("Owner : ", owner);
         io:println("Email : ", payload.email);
-        string sampleQuery = string `SELECT AccountID FROM Contact WHERE Email = '${payload.email ?: ""}'`;
+
+        string sampleQuery = string `SELECT Id FROM Lead WHERE Email = '${payload.email ?: ""}'`;
         stream<record {}, error?> queryResults = check baseClient->query(sampleQuery);
         
         int nLines = 0;
         string recordId;
         check from record {} rd in queryResults
             do {
-                recordId = check rd.toJson().AccountId;
+                recordId = check rd.toJson().Id;
                 nLines += 1;
             };
 
-        if (nLines != 0) {
-            io:println("Account already created. Account ID : ", recordId);
-            return http:CREATED;
-        }
-
-        io:println("Account not found for the email : ", payload.email);
-
-        sampleQuery = string `SELECT Id FROM Lead WHERE Email = '${payload.email ?: ""}'`;
-        queryResults = check baseClient->query(sampleQuery);
-        
-        int nLines2 = 0;
-        check from record {} rd in queryResults
-            do {
-                recordId = check rd.toJson().Id;
-                nLines2 += 1;
-            };
-
-        if (nLines2 == 0) {
+        if (nLines == 0) {
             io:println("Lead not found for the email : ", payload.email);
             return http:NOT_FOUND;
         }

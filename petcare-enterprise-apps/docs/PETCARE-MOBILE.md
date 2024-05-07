@@ -1,4 +1,4 @@
-# Pet care sample with Asgardeo Android SDK
+# Pet Care PetDesk mobile application
 
 ## Prerequisites:
 
@@ -11,9 +11,8 @@ Required versions
  ```
 
 # 1. Setup steps Identity Server
-1.1 Setup the latest version of WSO2 Identity Sever.
-
-1.2 [Create a mobile application](https://is.docs.wso2.com/en/next/guides/applications/register-mobile-app/) (Untick the PKCE `Mandatory` checkbox)
+1.1 Access **Asgardeo** at https://console.asgardeo.io/ and log in. 
+1.2 [Create a mobile application](https://wso2.com/asgardeo/docs/guides/applications/register-mobile-app/) (Untick the PKCE `Mandatory` checkbox)
 - Add `wso2.apiauth.sample.android://login-callback` as the redirect URL of the application
 
 # 2. Import the configurations

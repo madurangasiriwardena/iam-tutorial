@@ -215,6 +215,8 @@ dbPort = "<DB_PORT>"
 ![Alt text](readme-resources/home-page-b2b.png?raw=true "Home Page")
 
 2. Click on the **Get Started** to get started.
-3. You will get a Sign In prompt and click on the **Sign In With Organization Login** at the bottom of the menu.
+3. You will get a Sign In prompt and click on the **Sign In With SSO** at the bottom of the menu.
 4. Provide the **City Vet Hospital** as the Name of the Organization and click **Submit**.
 5. Use admin user credentials (admin@cityvet.com) created to login to the application.
+
+![Alt text](readme-resources/landing-page-b2b.png?raw=true "Landing Page")

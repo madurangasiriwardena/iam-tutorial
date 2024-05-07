@@ -1,4 +1,4 @@
-# Run PetDesk B2C Application in cloud environment
+# Run Pet Care PetDesk B2C B2C Application in cloud environment
 
 This guide will show you how to use [Asgardeo](https://wso2.com/asgardeo/), WSO2's SaaS Customer IAM (CIAM) solution to secure user authentication to the web application and add CIAM features to your web application. Also to use [Choreo](https://wso2.com/choreo/) to expose a service endpoint as a REST API and safely consume the API from a web application.
 &nbsp;<br>

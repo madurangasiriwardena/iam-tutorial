@@ -1,4 +1,4 @@
-# Run PetDesk B2C Application locally
+# Run Pet Care PetDesk B2C Application locally
 
 ## Prerequisites:
 1. Install Ballerina 2201.5.0 https://dist.ballerina.io/downloads/2201.5.0/ballerina-2201.5.0-swan-lake-macos-arm-x64.pkg

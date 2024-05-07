@@ -25,45 +25,77 @@ When deploying the webhook through choreo, provide the salesforce related config
 14. Add a tick on the Requested Column for the **Full Name** and click **Update**.
 15. Then go to the **Sign-In Method** tab.
 16. Configure **Google login** as described in https://wso2.com/asgardeo/docs/guides/authentication/social-login/add-google-login/
-17. As shown in the below, add **Username & Password** as an **Authentication** step.
+17. As shown in the below, add **Username & Password, Passey, TOTP** as an **Authentication** step.
+![Alt text](readme-resources/sign-in-methods.png?raw=true "Sign In Methods")
 18. To perform the acr-based step up authentication add the following conditional script to the login flow.
 
 ```
-// Define conditional authentication by passing one or many Authentication Context Class References 
-// as comma separated values.
+var promptTOTP = function (context) {
+    Log.info('------------- promptTOTP is requested 1234');
+    var totp = 'http://wso2.org/claims/identity/secretkey';
+    var totpState = context.currentKnownSubject.localClaims[totp];
+    var idpName = context.currentStep.idp;
+    var authenticator = context.steps[1].authenticator;
+    if (authenticator !== 'FIDOAuthenticator' && idpName !== 'LOCAL') {
+        var user = getAssociatedLocalUser(context.currentKnownSubject);
+        if (user) {
+            Log.info('-----------Associated local user profile available for IdP: ' + idpName);
+            totpState = user.localClaims[totp];
+        }
+    }
+    return totpState;
+};
 
-// Specify the ordered list of ACR here.
+var handleStep2 = function () {
+    Log.info('------------- Prompt TOTP ');
+    executeStep(2, {
+        onSuccess: function (context) {
+            Log.info("------------- TOTP success. Setting acr2");
+            var user = context.steps[1].subject;
+            user.claims["http://wso2.org/claims/acr"] = "acr2";
+        }
+    });
+};
+
+var addAcrSetting = function (user, acr) {
+    var loginMethod = user.authenticator === 'FIDOAuthenticator' ? 'passkey' : 'username pwd';
+    Log.info("------------- Logged in from " + loginMethod + ". Setting " + acr);
+    user.claims["http://wso2.org/claims/acr"] = acr;
+};
+
 var supportedAcrValues = ['acr1', 'acr2'];
 
 var onLoginRequest = function (context) {
-    var selectedAcr = selectAcrFrom(context, supportedAcrValues);
-    Log.info('--------------- ACR selected: ' + selectedAcr);
-    context.selectedAcr = selectedAcr;
-    switch (selectedAcr) {
-        case supportedAcrValues[0]:
-            executeStep(1, {
-                onSuccess: function (context) {
+    var requestedAcr = selectAcrFrom(context, supportedAcrValues);
+    //context.requestedAcr = requestedAcr;
+    if (requestedAcr == "acr2") {
+        executeStep(1, {
+            onSuccess: function (context) {
+                if (promptTOTP(context)) {
+                    handleStep2();
+                } else {
                     var user = context.steps[1].subject;
-                    user.claims["http://wso2.org/claims/acr"] = "acr1"
+                    var authenticator = context.steps[1].authenticator;
+                    if ('FIDOAuthenticator' == authenticator) {
+                        addAcrSetting(user, "acr2");
+                    } else {
+                        handleStep2();
+                    }
                 }
-            });
-            break;
-        case supportedAcrValues[1]:
-            executeStep(1);
-            executeStep(2, {
-                onSuccess: function (context) {
+            }
+        });
+    } else {
+        executeStep(1, {
+            onSuccess: function (context) {
+                if (promptTOTP(context)) {
+                    handleStep2();
+                } else {
                     var user = context.steps[1].subject;
-                    user.claims["http://wso2.org/claims/acr"] = "acr2"
+                    var acrToSet = context.steps[1].authenticator === 'FIDOAuthenticator' ? 'acr2' : 'acr1';
+                    addAcrSetting(user, acrToSet);
                 }
-            });
-            break;
-        default:
-            executeStep(1, {
-                onSuccess: function (context) {
-                    var user = context.steps[1].subject;
-                    user.claims["http://wso2.org/claims/acr"] = "acr1"
-                }
-            });
+            }
+        });
     }
 };
 ```

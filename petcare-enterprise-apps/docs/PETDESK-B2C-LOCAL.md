@@ -8,7 +8,7 @@
 When deploying the webhook through choreo, provide the salesforce related configuration by getting them using this [guide](#setup-salesforce-account-guide).
 
 
-## Create an Application in WSO2 Identity Server
+## Create an Application in Asgardeo
 1. Create a Single-Page Application named `Pet Desk App` in root organization.
 2. Add the `Authorized redirect URLs` as `http://localhost:3000`.
 3. Go to the `Protocol` tab and copy the `Client ID`.

@@ -49,6 +49,13 @@ dbPort = "<DB_PORT>"
       ```
    4. Expand the `Color Palette` and add `#69a2f4` as the `Primary Color`.
 
+### Customize email templates
+
+   1. Navigate to root organization's email templates section.
+   2. Select **Request New User Password**
+   3. Search for `{{account.recovery.endpoint-url}}/confirmrecovery.do?confirmation={{confirmation-code}}&amp;userstoredomain={{userstore-domain}}&amp;username={{url:user-name}}&amp;type=invite link`
+   4. Append the following params to the URL `sp=Pet Care App&orgid={{organization-id}}` (NOTE: Need to add the created application name)
+
 ### Create API Resources
 1. Switch back to the primary organization and navigate to the API Resources section.
 2. Create the Channel Service API resource by clicking the New API Resources.
@@ -206,7 +213,12 @@ dbPort = "<DB_PORT>"
 ## Create your first customer organization in WSO2 Identity Server
 1. Navigate to WSO2 Identity Server Console of the primary organization.
 2. Create a sub-organization named `City Vet Hospital` from the `Organizations` section and switch to the sub-organization.
-3. Add a new user. You can use ‘admin@cityvet.com’ as the username of the user.
+
+## Create your first admin in the organization
+1. Add a new user. You can use ‘admin@cityvet.com’ as the username of the user.
+2. You have the following options when setting up the password.
+   - Invite the user to set their own password. User will get the navigation to the sample application when you have completed the [customize email templates step](#customize-email-templates)
+   - Set a password for the user
 
 ## Consume the PetVet Application
 

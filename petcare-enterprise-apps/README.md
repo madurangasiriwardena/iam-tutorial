@@ -8,11 +8,12 @@ You can try the Pet Care B2C applications using the following guides.
 
 ### 1. Pet Care PetDesk web application 
 
-You can run the PetDesk B2C web application using cloud deployment or locally using the following guides.
+You can run the PetDesk B2C web application locally in your machine or in Choreo using the following guides.
 
-&ensp;&ensp;&ensp;&ensp;1. Run in cloud environment using the [guide](/petcare-enterprise-apps/docs/PETDESK-B2C-CLOUD.md)
+&ensp;&ensp;&ensp;&ensp;1. Run Locally using the [guide](/petcare-enterprise-apps/docs/PETDESK-B2C-LOCAL.md)
+
+&ensp;&ensp;&ensp;&ensp;2. Deploy in Choreo using the [guide](/petcare-enterprise-apps/docs/PETDESK-B2C-CLOUD.md)
 <br>
-&ensp;&ensp;&ensp;&ensp;2. Run Locally using the [guide](/petcare-enterprise-apps/docs/PETDESK-B2C-LOCAL.md)
 
 ### 2. Pet Care PetDesk mobile application
 

@@ -1,8 +1,8 @@
 # Pet care sample with Asgardeo Android SDK
 
-## ⚠️ Read this first
+## Prerequisites:
 
-1. Required versions
+Required versions
  ```
  Java version >= 17
  ```
@@ -10,14 +10,14 @@
  Android Studio version >= Giraffe
  ```
 
-#### 1. Setup steps Identity Server
+# 1. Setup steps Identity Server
 1.1 Setup the latest version of WSO2 Identity Sever.
 
-1.2 [Create a mobile application](https://is.docs.wso2.com/en/next/guides/applications/register-mobile-app/) (Un tick the PKCE `Mandayory` checkbox)
+1.2 [Create a mobile application](https://is.docs.wso2.com/en/next/guides/applications/register-mobile-app/) (Untick the PKCE `Mandatory` checkbox)
 - Add `wso2.apiauth.sample.android://login-callback` as the redirect URL of the application
 
-#### 2. Import the configurations
-2.1 Go to the `<APP_CONTENT_LOCATION>/com/wso2_sample/api_auth_sample/util/Config.kt` file and change the following values according the application you created above,
+# 2. Import the configurations
+2.1 Go to the `<APP_CONTENT_LOCATION>/com/wso2_sample/api_auth_sample/util/Config.kt` file and change the following values according to the application you created above,
 
 ```
 private const val BASE_URL: String = <BASE_URL of the tenant>
@@ -32,16 +32,16 @@ private val DATA_SOURCE_RESOURCE_SERVER_URL: String? = null
 >| Property                    |                                    Value/s                                     |
 >|--------------------------|:------------------------------------------------------------------------------:|
 >| BASE_URL      |            Enter the base URL of the IS server here. If you are using an emulator to try with a locally hosted IS instance, <b>make sure to replace `localhost` with `10.0.2.2` !</b>          |
->| DISCOVERY_URL |  Discovery URL of the teant. This will not work in a locally hosted version of IS hence keep this value `null` if you are plannig to use a locally hosted version of IS.  |
+>| DISCOVERY_URL |  Discovery URL of the tenant. This will not work in a locally hosted version of IS hence keep this value `null` if you are plannig to use a locally hosted version of IS.  |
 >| CLIENT_ID | Client ID of the created application. |
 >| REDIRECT_URI | `wso2.apiauth.sample.android://login-callback` |
 >| SCOPE |            `openid internal_login`             |
 >| GOOGLE_WEB_CLIENT_ID  | Enter the client id of the Google credential that will be used to create the Google connection in the IS. Since we are using the IS to authenticate the user we need to identify the currently signed-in user on the server. To do so securely, after a user successfully signs in, we need to send the user's ID token to the IS using HTTPS. Then, on the server, we are verifing the integrity of the ID token and use the user information contained in the token to establish the session. To generate the user's ID token for the IS, we will require the client id that is used to create the Google connection in the IS. For more details, https://developers.google.com/identity/sign-in/android/backend-auth         |
->| DATA_SOURCE_RESOURCE_SERVER_URL |  This is the url where we have hosted the pet care service. If you do not have that setup keep this value `null`, the app is developed to show a dummy data if the resource server is not available. |
+>| DATA_SOURCE_RESOURCE_SERVER_URL |  This is the url where we have hosted the pet care service. If you do not have that setup keep this value `null`, the app is developed to show dummy data if the resource server is not available. |
 
 2.2 Go to the `<APP_CONTENT_LOCATION>/java/com/wso2_sample/api_auth_sample/features/login/impl/repository/AsgardeoAuthRepositoryImpl.kt` file, and change the values passed for the `AuthenticationCoreConfig` object at your discretion.
 
-#### 3. Setup Google Login
+# 3. Setup Google Login
 3.1 Go to `https://console.cloud.google.com/` and create a new project.
 
 3.2 In the `credentials` section create two `Oauth Client IDs` one for `android app(Select Android)` and one for `WSO2 identity server(Select Web Application)`.
@@ -127,7 +127,7 @@ curl --location 'https://localhost:9443/api/server/v1/identity-providers' \
 ```
 3.4 Add the created Google connection to the created application (in step 2) as a level 1 sign-in option.
 
-#### 4. Run the application
+# 4. Run the application
 
 4.1 To run the application you need to open the application from the Android Studio IDE, and select the project to open with an `Android` view from the project view selection.
 ![image](https://github.com/wso2/samples-is/assets/46097917/c5ebb28f-335e-4a0f-a560-5504f5402f55)
@@ -135,24 +135,24 @@ curl --location 'https://localhost:9443/api/server/v1/identity-providers' \
 4.2 You may require to sync the gradle files again. This can be done using the `Sync project with Gradle files` icon in the top right hand corner of the IDE (or in Apple `Shift + Command + O`).
 ![image](https://github.com/wso2/samples-is/assets/46097917/f4548481-9eda-425b-8535-eed610012723)
 
-###### Optional
+# Optional
 > This project is recommended to run on an emulator version `Pixel 7` or above, becuase some authenticators like `Passkey` are not supported for older version of Andriod.  To download the new emulator you can refer the following documentation. When selecting the device make sure to select `Pixel 7` or above version.
 https://developer.android.com/studio/run/managing-avds
 
 4.3 After the gradle files are synced you can run the app from the `Run `app`` button on the top bar (or in Apple `Command + R`)
 ![image](https://github.com/wso2/samples-is/assets/46097917/2ec180e4-4aec-4c0c-83b7-258118bfd988)
 
-#### 5. Client attestation
+# 5. Client attestation
 
 5.1 To test the client attestation you need to test the application from a real device, where the app downloaded from the playstore, for this <b>you will require a Google play account</b>.
 This application is bound to one of my Google cloud projects, hence you need to change the package name of the application and associate the project with a new Google Project, for this you can use the Google project that you created for the step 3.
 > Changing the package name of an Android application involves several steps. It's a common task, but it requires careful attention to detail to ensure that all components of the app work correctly after the change. Here are the general steps:
 >
-> #### Step 1: Backup Your Project
+> ## Step 1: Backup Your Project
 >
 > Before making any changes, it's always a good idea to create a backup of your entire project to avoid potential data loss.
 >
-> #### Step 2: Update the Package Name in the Manifest
+> ## Step 2: Update the Package Name in the Manifest
 >
 > 1. Open the `AndroidManifest.xml` file in your Android Studio.
 > 2. Locate the `package` attribute in the `<manifest>` element and change the package name to your desired name.
@@ -169,13 +169,13 @@ This application is bound to one of my Google cloud projects, hence you need to 
 >        package="com.your.new.packagename">
 >    ```
 >
-> #### Step 3: Refactor the Package Name
+> ## Step 3: Refactor the Package Name
 >
 > 1. Right-click on the old package name in the project explorer.
 > 2. Select "Refactor" > "Rename" (or just press `Shift` + `F6`).
 > 3. Enter the new package name and click "Refactor."
 >
-> #### Step 4: Update Gradle Files
+> ## Step 4: Update Gradle Files
 >
 > 1. Open the `build.gradle` file (Module: app).
 > 2. Update the `applicationId` to the new package name.
@@ -192,22 +192,22 @@ This application is bound to one of my Google cloud projects, hence you need to 
 >
 > 3. Sync your project with Gradle by clicking on the "Sync Now" prompt that appears in the bar at the top.
 >
-> #### Step 5: Rename Source Code Directories
+> ## Step 5: Rename Source Code Directories
 >
 > 1. Right-click on the old package name directory and choose "Refactor" > "Rename."
 > 2. Enter the new package name and click "Refactor."
 >
-> #### Step 6: Update References
+> ## Step 6: Update References
 >
 > 1. Android Studio will update most references automatically, but double-check for any manual references in your code or resources.
 > 2. Look for occurrences of the old package name and update them to the new one.
 >
-> #### Step 7: Clean and Rebuild
+> ## Step 7: Clean and Rebuild
 >
 > 1. Clean your project by selecting "Build" > "Clean Project" from the menu.
 > 2. Rebuild your project by selecting "Build" > "Rebuild Project."
 >
-> #### Step 8: Test Your App
+> ## Step 8: Test Your App
 >
 > 1. Run your app on an emulator or a physical device to ensure that everything is working as expected.
 > 2. Check for any errors or warnings in the logcat.
@@ -245,10 +245,10 @@ The application you created requires 2 properties to perform android attestation
 > NOTE:
 > When you have released multiple versions of the application, you may face a problem that the application you download from the link are still giving the old version, to mitigate this you can change the device and open the link or wait a few minutes.
 
-###### App Screens
+# App Screens
 ![Screenshot_20240411_223503](https://github.com/wso2/samples-is/assets/46097917/e2aabd05-4450-4dff-a93d-587bd37360b8)
 ![Screenshot_20240411_223521](https://github.com/wso2/samples-is/assets/46097917/34bd711c-aa69-418a-a5a9-6e517d15ba1a)
 ![Screenshot_20240411_223607](https://github.com/wso2/samples-is/assets/46097917/6c6a6d25-4be3-454b-930d-9fd4332c1e4c)
 
-###### Credits
+# Credits
 - Images used in the application are taken from [Freepik](https://www.freepik.com/), [Unsplash](https://unsplash.com/), and [Flaticon](https://www.flaticon.com/).

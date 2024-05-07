@@ -3,6 +3,7 @@
 ## Prerequisites:
 1. Install Ballerina 2201.5.0 https://dist.ballerina.io/downloads/2201.5.0/ballerina-2201.5.0-swan-lake-macos-arm-x64.pkg
 2. Install Node 16 LTS (Tested in v16.13.0).
+3. Latest [WSO2 Identity Server 7.0](https://wso2.com/identity-server/) distribution up and running
 
 ## Deploy API Services
 1. Navigate to <PROJECT_HOME>/petcare-enterprise-apps/b2b/apis/channel-service and start the channel 
@@ -32,13 +33,10 @@ dbDatabase = "<DB_NAME>"
 dbPort = "<DB_PORT>"
 ```
 
-## Create Organization in WSO2 Identity Server
-1. Sign in to WSO2 Identity Server Console of the primary organization.
-2. Create a sub-organization named `City Vet Hospital` from the `Organizations` section and switch to the sub-organization.
-3. Add a new user. You can use ‘admin@cityvet.com’ as the username of the user.
+## Configure Identity Server
 
-## Configure Branding in the sub-organization
-1. In the sub organization, navigate to the `Styles & Text` section under the `Branding` section.
+### Configure Branding in the root organization
+1. In the root organization, navigate to the `Styles & Text` section under the `Branding` section.
 2. Set the following properties. 
    1. Navigate to `Design` Tab, expand the `Images` and add the following URL as the Logo URL.
       ```
@@ -51,7 +49,7 @@ dbPort = "<DB_PORT>"
       ```
    4. Expand the `Color Palette` and add `#69a2f4` as the `Primary Color`.
 
-## Create API Resources
+### Create API Resources
 1. Switch back to the primary organization and navigate to the API Resources section.
 2. Create the Channel Service API resource by clicking the New API Resources.
    1. Identifier - http://localhost:9091
@@ -90,7 +88,7 @@ dbPort = "<DB_PORT>"
       2. update_branding
       3. delete_branding
 
-## Create an Application in WSO2 Identity Server
+### Create an Application
 1. Create an OIDC standard based application named `Pet Care App` in primary organization.
 2. Share it with the created sub-organization named as `City Vet Hospital`.
 3. Navigate to the `Protocol` tab and do the followings.
@@ -138,7 +136,7 @@ dbPort = "<DB_PORT>"
     };
     ```
 
-## Create Roles
+### Create Roles
 1. Navigate to Roles section under User Management and create 3 application roles for admin, doctor and pet owner 
    with the following details.
    1. Role name: pet-care-admin
@@ -180,7 +178,7 @@ dbPort = "<DB_PORT>"
    switching to the sub-organization.
 
 ## Deploy the Front End Application
-1. Navigate to <PROJECT_HOME>/petcare-sample/b2b/web-app/petvet/web/nextjs/apps/business-admin-app, create a `.env` 
+1. Navigate to <PROJECT_HOME>/petcare-enterprise-apps/b2b/web-app, create a `.env` 
    file and add the followings to the `.env` file.
    ```dtd
    NEXTAUTH_URL=http://localhost:3002
@@ -196,7 +194,7 @@ dbPort = "<DB_PORT>"
    NODE_TLS_REJECT_UNAUTHORIZED=0
    ```
    
-2. Start the application from <PROJECT_HOME>/petcare-sample/b2b/web-app/petvet/web/nextjs
+2. Start the application from <PROJECT_HOME>/petcare-enterprise-apps/b2b/web-app
     ```dtd
     npm install
     npx nx serve business-admin-app
@@ -204,3 +202,19 @@ dbPort = "<DB_PORT>"
    
 3. Visit the sample application at http://localhost:3002. 
 4. Optionally, visit the http://localhost:3002?orgId=<suborg_Id> to directly visit the sub-organization login.
+
+## Create your first customer organization in WSO2 Identity Server
+1. Navigate to WSO2 Identity Server Console of the primary organization.
+2. Create a sub-organization named `City Vet Hospital` from the `Organizations` section and switch to the sub-organization.
+3. Add a new user. You can use ‘admin@cityvet.com’ as the username of the user.
+
+## Consume the PetVet Application
+
+1. Visit the sample application at http://localhost:3002
+
+![Alt text](readme-resources/home-page-b2b.png?raw=true "Home Page")
+
+2. Click on the **Get Started** to get started.
+3. You will get a Sign In prompt and click on the **Sign In With Organization Login** at the bottom of the menu.
+4. Provide the **City Vet Hospital** as the Name of the Organization and click **Submit**.
+5. Use admin user credentials (admin@cityvet.com) created to login to the application.

@@ -10,7 +10,7 @@ Required versions
  Android Studio version >= Giraffe
  ```
 
-# 1. Setup steps Identity Server
+# 1. Setup in Asgardeo
 1.1 Access **Asgardeo** at https://console.asgardeo.io/ and log in. 
 1.2 [Create a mobile application](https://wso2.com/asgardeo/docs/guides/applications/register-mobile-app/) (Untick the PKCE `Mandatory` checkbox)
 - Add `wso2.apiauth.sample.android://login-callback` as the redirect URL of the application

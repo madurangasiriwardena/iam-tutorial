@@ -35,20 +35,26 @@ Authorized redirect URLs: https://localhost:3000 (This will be updated with the 
 20. To perform the acr-based step up authentication add the following conditional script to the login flow.
 
 ```
-var promptTOTP = function (context) {
-    Log.info('------------- promptTOTP is requested 1234');
+var promptTOTP = function(context) {
     var totp = 'http://wso2.org/claims/identity/secretkey';
     var totpState = context.currentKnownSubject.localClaims[totp];
     var idpName = context.currentStep.idp;
     var authenticator = context.steps[1].authenticator;
-    if (authenticator !== 'FIDOAuthenticator' && idpName !== 'LOCAL') {
-        var user = getAssociatedLocalUser(context.currentKnownSubject);
-        if (user) {
-            Log.info('-----------Associated local user profile available for IdP: ' + idpName);
-            totpState = user.localClaims[totp];
+    if ('FIDOAuthenticator' != authenticator) {
+        if (idpName != 'LOCAL') {
+            var user = getAssociatedLocalUser(context.currentKnownSubject);
+            if (user) {
+                Log.info('-----------Associated local user profile available for IdP: ' + idpName);
+                totpState = user.localClaims[totp];
+            }
+        }
+
+        if (totpState) {
+            Log.info('-------------TOTP is set up ');
+            return true;
         }
     }
-    return totpState;
+    return false;
 };
 
 var handleStep2 = function () {

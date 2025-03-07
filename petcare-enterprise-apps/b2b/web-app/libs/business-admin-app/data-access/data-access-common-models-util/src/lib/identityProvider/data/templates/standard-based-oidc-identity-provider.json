@@ -130,7 +130,7 @@
             "jit": {
                 "isEnabled": true,
                 "scheme": "PROVISION_SILENTLY",
-                "userstore": "PRIMARY",
+                "userstore": "DEFAULT",
                 "associateLocalUser": true
             }
         },

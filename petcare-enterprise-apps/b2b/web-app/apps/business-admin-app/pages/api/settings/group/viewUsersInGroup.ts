@@ -42,7 +42,7 @@ export default async function viewUsersInGroup(req: NextApiRequest, res: NextApi
 
     try {
         const fetchData = await fetch(
-            `${getOrgUrl(orgId)}/scim2/Users?domain=PRIMARY&filter=groups+eq+${group}`,
+            `${getOrgUrl(orgId)}/scim2/Users?domain=DEFAULT&filter=groups+eq+${group}`,
             requestOptions(session)
         );
         const users = await fetchData.json();

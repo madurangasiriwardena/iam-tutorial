@@ -41,7 +41,7 @@ export default async function viewUsers(req: NextApiRequest, res: NextApiRespons
 
     try {
         const fetchData = await fetch(
-            `${getOrgUrl(orgId)}/scim2/Users?domain=PRIMARY`,
+            `${getOrgUrl(orgId)}/scim2/Users?domain=DEFAULT`,
             requestOptions(session)
         );
         const users = await fetchData.json();

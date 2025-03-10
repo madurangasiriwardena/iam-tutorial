@@ -25,4 +25,5 @@ export interface IndexHomeComponentProps {
     tagText : string
     signinOnClick : MouseEventHandler<HTMLElement>
     signUpOnClick : MouseEventHandler<HTMLElement>
+    isSignUpButtonVisible : boolean
 }

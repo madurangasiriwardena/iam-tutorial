@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import { Button } from "rsuite";
+import {Button} from "rsuite";
 import styles from "./indexHomeComponent.module.css";
 import { IndexHomeComponentProps } from "../../models/indexHomeComponent/indexHomeComponent";
 
@@ -27,7 +27,7 @@ import { IndexHomeComponentProps } from "../../models/indexHomeComponent/indexHo
  */
 export function IndexHomeComponent(prop: IndexHomeComponentProps) {
 
-    const { logoComponent, signinOnClick, signUpOnClick } = prop;
+    const { logoComponent, signinOnClick, signUpOnClick, isSignUpButtonVisible } = prop;
 
     return (
         <div>
@@ -42,13 +42,16 @@ export function IndexHomeComponent(prop: IndexHomeComponentProps) {
                         onClick={ signinOnClick }>
                         Sign In
                     </Button>
-                    <Button
-                        className={ styles["signUpDivButton"] }
-                        size="md"
-                        appearance="ghost"
-                        onClick={ signUpOnClick }>
-                        Sign Up
-                    </Button>
+                        {isSignUpButtonVisible && (
+                            <Button
+                                className={ styles["signUpDivButton"] }
+                                size="md"
+                                appearance="ghost"
+                                onClick={ signUpOnClick }>
+                                Sign Up
+                            </Button>
+                        )}
+
                     </div>
                 </div>
             </main>

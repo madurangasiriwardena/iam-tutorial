@@ -7,7 +7,7 @@
             "type": "item",
             "hideBasedOnScope": true,
             "scopes": [
-                "list_doctors",
+                "list_meetings",
                 "view_org_info",
                 "update_org_info"
             ]
@@ -36,13 +36,13 @@
             ]
         },
         {
-            "title": "Manage Doctors",
+            "title": "Manage Meetings",
             "eventKey": "3",
             "icon": "ProfileIcon",
             "type": "item",
             "hideBasedOnScope": true,
             "scopes": [
-                "create_doctor"
+                "create_meeting"
             ]
         },
         {

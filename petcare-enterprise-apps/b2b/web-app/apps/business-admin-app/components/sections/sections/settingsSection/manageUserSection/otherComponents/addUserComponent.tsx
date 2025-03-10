@@ -26,8 +26,8 @@ import { PatchMethod, checkIfJSONisEmpty } from "@pet-management-webapp/shared/u
 import { LOADING_DISPLAY_BLOCK, LOADING_DISPLAY_NONE, fieldValidate } 
     from "@pet-management-webapp/shared/util/util-front-end-util";
 import EmailFillIcon from "@rsuite/icons/EmailFill";
-import { postDoctor } from "apps/business-admin-app/APICalls/CreateDoctor/post-doc";
-import { Doctor, DoctorInfo } from "apps/business-admin-app/types/doctor";
+import { postMeeting } from "../../../../../../APICalls/ScheduleMeeting/post-meeting";
+import { Meeting, MeetingInfo } from "../../../../../../types/meeting";
 import { AxiosResponse } from "axios";
 import { Session } from "next-auth";
 import { useCallback, useEffect, useState } from "react";
@@ -42,7 +42,6 @@ interface AddUserComponentProps {
     session: Session
     open: boolean
     onClose: () => void
-    isDoctor: boolean
 }
 
 /**
@@ -53,11 +52,11 @@ interface AddUserComponentProps {
  */
 export default function AddUserComponent(props: AddUserComponentProps) {
 
-    const { session, open, onClose, isDoctor } = props;
+    const { session, open, onClose } = props;
 
     const [ loadingDisplay, setLoadingDisplay ] = useState(LOADING_DISPLAY_NONE);
     const [ inviteSelect, serInviteSelect ] = useState<InviteConst>(InviteConst.INVITE);
-    const [ userTypeSelect, setUserTypeSelect ] = useState<string>(isDoctor? "DOCTOR" : "PET_OWNER");
+    const [ userTypeSelect, setUserTypeSelect ] = useState<string>("USER");
     const [ inviteShow, setInviteShow ] = useState(LOADING_DISPLAY_BLOCK);
     const [ passwordShow, setPasswordShow ] = useState(LOADING_DISPLAY_NONE);
     const [ rolesList, setRolesList ] = useState<Role[]>([]);
@@ -104,12 +103,8 @@ export default function AddUserComponent(props: AddUserComponentProps) {
 
     const userTypeList: {[key: string]: string}[] = [
         {
-            label: "Pet Owner",
-            value: "PET_OWNER"
-        },
-        {
-            label: "Doctor",
-            value: "DOCTOR"
+            label: "Organization User",
+            value: "USER"
         },
         {
             label: "Admin",
@@ -147,9 +142,9 @@ export default function AddUserComponent(props: AddUserComponentProps) {
         }
     };
 
-    const onDoctorSubmit = (response: AxiosResponse<Doctor>, form): void => {
+    const onDoctorSubmit = (response: AxiosResponse<Meeting>, form): void => {
         if (response) {
-            // successTypeDialog(toaster, "Changes Saved Successfully", "Doctor add to the organization successfully.");
+            // successTypeDialog(toaster, "Changes Saved Successfully", "Meeting add to the organization successfully.");
             form.restart();
             onClose();
         } else {
@@ -172,38 +167,17 @@ export default function AddUserComponent(props: AddUserComponentProps) {
             .then((response1) => {
                 onUserSubmit(response1, form);
                 let roleDetails: Role;
-                
-                if (userTypeSelect === "DOCTOR") {
-                    const payload: DoctorInfo = {
-                        address: values.Address ? values.Address : "",
-                        availability: [],
-                        dateOfBirth: values.DateOfBirth ? values.DateOfBirth : "",
-                        emailAddress: values.email,
-                        gender: values.Gender ? values.Gender : "",
-                        name: values.firstName + " " + values.familyName,
-                        registrationNumber: values.RegistrationNumber,
-                        specialty: values.Specialty ? values.Specialty : "N/A"
-                    };
-                    
-                    postDoctor(session.accessToken, payload)
-                        .then((response) => onDoctorSubmit(response, form));
-        
-                    roleDetails = rolesList.find((role) => role.displayName === "pet-care-doctor");
-
-                    controllerDecodePatchRole(session, roleDetails.id, PatchMethod.ADD, "users", response1.id)
-                        .then((response) => onRoleSubmit(response))
-                        .finally(() => setLoadingDisplay(LOADING_DISPLAY_NONE));
-                }
 
                 if (userTypeSelect === "ADMIN") {
-                    roleDetails = rolesList.find((role) => role.displayName === "pet-care-admin");
+                    // TODO change the role names
+                    roleDetails = rolesList.find((role) => role.displayName === "teamspace-admin");
                     controllerDecodePatchRole(session, roleDetails.id, PatchMethod.ADD, "users", response1.id)
                         .then((response) => onRoleSubmit(response))
                         .finally(() => setLoadingDisplay(LOADING_DISPLAY_NONE));
                 }
 
-                if (userTypeSelect === "PET_OWNER") {
-                    roleDetails = rolesList.find((role) => role.displayName === "pet-care-pet-owner");
+                if (userTypeSelect === "USER") {
+                    roleDetails = rolesList.find((role) => role.displayName === "teamspace-user");
 
                     controllerDecodePatchRole(session, roleDetails.id, PatchMethod.ADD, "users", response1.id)
                         .then((response) => onRoleSubmit(response))
@@ -225,11 +199,7 @@ export default function AddUserComponent(props: AddUserComponentProps) {
         <Modal backdrop="static" role="alertdialog" open={ open } onClose={ onClose } size="sm">
 
             {
-                isDoctor 
-                    ? (<Modal.Header>
-                        <ModelHeaderComponent title="Add Doctor" subTitle="Add a New Doctor to the Organization" />
-                    </Modal.Header>) 
-                    : (<Modal.Header>
+                (<Modal.Header>
                         <ModelHeaderComponent title="Add User" subTitle="Add a New User to the Organization" />
                     </Modal.Header>)
             }
@@ -245,36 +215,20 @@ export default function AddUserComponent(props: AddUserComponentProps) {
                                 layout="vertical"
                                 onSubmit={ () => { handleSubmit().then(form.restart); } }
                                 fluid>
-                                {
-                                    !isDoctor && (
-                                        <FormField
-                                            name="userType"
-                                            label="Type of User"
-                                            needErrorMessage={ true }
-                                        >
-                                            <SelectPicker 
-                                                data={ userTypeList }
-                                                value= { userTypeSelect }
-                                                searchable={ false }
-                                                defaultValue={ "PET_OWNER" } 
-                                                onSelect={ userTypeSelectOnChange }
-                                                block
-                                            />
-                                        </FormField>
-                                    )
-                                }
-                                {
-                                    userTypeSelect === "DOCTOR" 
-                                        ? (<FormField
-                                            name="RegistrationNumber"
-                                            label="Registration Number"
-                                            helperText="Registration Number of the doctor."
-                                            needErrorMessage={ true }
-                                        >
-                                            <FormSuite.Control name="input" />
-                                        </FormField>) 
-                                        : null
-                                }
+                                <FormField
+                                    name="userType"
+                                    label="Type of User"
+                                    needErrorMessage={ true }
+                                >
+                                    <SelectPicker
+                                        data={ userTypeList }
+                                        value= { userTypeSelect }
+                                        searchable={ false }
+                                        defaultValue={ "USER" }
+                                        onSelect={ userTypeSelectOnChange }
+                                        block
+                                    />
+                                </FormField>
 
                                 <FormField
                                     name="firstName"
@@ -304,56 +258,6 @@ export default function AddUserComponent(props: AddUserComponentProps) {
                                 >
                                     <FormSuite.Control name="input" type="email" />
                                 </FormField>
-
-                                {
-                                    userTypeSelect === "DOCTOR" 
-                                        ? (
-                                            <>
-                                                <FormField
-                                                    name="DateOfBirth"
-                                                    label="Date Of Birth"
-                                                    helperText="Date Of Birth of the doctor."
-                                                    needErrorMessage={ true }
-                                                >
-                                                    <FormSuite.Control name="input" type="date"/>
-                                                </FormField>
-
-                                                <FormField
-                                                    name="Gender"
-                                                    label="Gender"
-                                                    helperText="Gender of the doctor."
-                                                    needErrorMessage={ true }
-                                                >
-                                                    { /* <FormSuite.Control name="input" type="SelectPicker" /> */ }
-                                                    <SelectPicker
-                                                        name="mySelectField"
-                                                        data={ options }
-                                                        searchable={ false }
-                                                        style={ { width: "100%" } }
-                                                    />
-                                                </FormField>
-
-                                                <FormField
-                                                    name="Specialty"
-                                                    label="Specialty"
-                                                    helperText="Specialty of the doctor."
-                                                    needErrorMessage={ true }
-                                                >
-                                                    <FormSuite.Control name="input" />
-                                                </FormField>
-
-                                                <FormField
-                                                    name="Address"
-                                                    label="Address"
-                                                    helperText="Address of the doctor."
-                                                    needErrorMessage={ true }
-                                                >
-                                                    <FormSuite.Control name="input" />
-                                                </FormField>
-                                            </>
-                                        )
-                                        : null
-                                }
 
                                 <RadioGroup
                                     name="radioList"

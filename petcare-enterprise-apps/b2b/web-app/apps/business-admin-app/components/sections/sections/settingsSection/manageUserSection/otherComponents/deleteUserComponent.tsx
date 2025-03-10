@@ -23,7 +23,7 @@ import { InternalUser } from "@pet-management-webapp/shared/data-access/data-acc
 import { FormButtonToolbar, ModelHeaderComponent } from "@pet-management-webapp/shared/ui/ui-basic-components";
 import { errorTypeDialog, successTypeDialog } from "@pet-management-webapp/shared/ui/ui-components";
 import { LOADING_DISPLAY_NONE } from "@pet-management-webapp/shared/util/util-front-end-util";
-import { deleteDoctor } from "apps/business-admin-app/APICalls/DeleteDoctor/delete-doctor";
+import { deleteMeeting } from "../../../../../../APICalls/DeleteMeeting/delete-meeting";
 import { Session } from "next-auth";
 import { useState } from "react";
 import { Form } from "react-final-form";
@@ -60,7 +60,7 @@ export default function DeleteUserComponent(prop: DeleteUserComponentProps) {
 
     const onSubmit = (): void => { 
 
-        deleteDoctor(session.accessToken, user.email)
+        deleteMeeting(session.accessToken, user.email)
             .catch((e) => {
                 //
             })

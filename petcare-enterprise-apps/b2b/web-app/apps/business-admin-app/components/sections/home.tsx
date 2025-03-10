@@ -20,21 +20,13 @@ import { LogoComponent } from "@pet-management-webapp/business-admin-app/ui/ui-c
 import { signout } from "@pet-management-webapp/business-admin-app/util/util-authorization-config-util";
 import { SignOutComponent } from "@pet-management-webapp/shared/ui/ui-components";
 import { getPersonalization } from "apps/business-admin-app/APICalls/GetPersonalization/get-personalization";
-import DoctorBookingsSection 
-    from "apps/business-admin-app/components/sections/sections/sectionsRelatedToDoctor/doctorBookings";
 import { Session } from "next-auth";
 import React, { useCallback, useEffect, useState } from "react";
 import "rsuite/dist/rsuite.min.css";
 import GetStartedSectionComponent from "./sections/getStartedSection/getStartedSectionComponent";
 import GetStartedSectionComponentForAdmin from "./sections/getStartedSection/getStartedSectionForAdmin";
-import GetStartedSectionComponentForDoctor from "./sections/getStartedSection/getStartedSectionForDoctor";
-import GetStartedSectionComponentForPetOwner from "./sections/getStartedSection/getStartedSectionForPetOwner";
-import PetsSection from "./sections/sectionsReatedToPetOwner/petsPage";
-import SettingsSection from "./sections/sectionsReatedToPetOwner/settings";
-import BookingsInPetOwnerSection from "./sections/sectionsRelatedToBookings/bookingsInPetOwnerView";
-import ChannelDoctorSection from "./sections/sectionsRelatedToBookings/channelDocSection";
-import DoctorProfileSection from "./sections/sectionsRelatedToDoctor/doctorProfile";
-import ManageDoctorsSection from "./sections/sectionsRelatedToDoctor/manageDoctors";
+import GetStartedSectionComponentForUser from "./sections/getStartedSection/getStartedSectionForUser";
+import ManageMeetingsSection from "./sections/sectionsRelatedToMeeting/manageMeetings";
 import IdpSectionComponent from "./sections/settingsSection/idpSection/idpSectionComponent";
 import ManageGroupSectionComponent from "./sections/settingsSection/manageGroupSection/manageGroupSectionComponent";
 import ManageUserSectionComponent from "./sections/settingsSection/manageUserSection/manageUserSectionComponent";
@@ -107,35 +99,14 @@ export default function Home(props: HomeProps): JSX.Element {
                 return <IdpSectionComponent session={ session } />;
             case "3":
 
-                return <ManageDoctorsSection session={ session } />;
-            case "4":
+                return <ManageMeetingsSection session={ session } />;
 
-                return <DoctorProfileSection session={ session } />;
-            case "5":
-
-                return <DoctorBookingsSection session={ session } />;
-            case "6":
-
-                return <PetsSection session={ session } />;
-            case "7-1":
-
-                return <ChannelDoctorSection session={ session } />;
-            case "7-2":
-
-                return <BookingsInPetOwnerSection session={ session } />;
-
-            case "8":
-
-                return <SettingsSection session={ session } />;
-            case "9":
-
-                return <GetStartedSectionComponentForDoctor  session={ session } />; 
             case "10":
 
                 return <GetStartedSectionComponentForAdmin  session={ session } />;
             case "11":
 
-                return <GetStartedSectionComponentForPetOwner  session={ session } />;     
+                return <GetStartedSectionComponentForUser  session={ session } />;
             case "12":
 
                 return <PersonalizationSectionComponent  session={ session } />;    

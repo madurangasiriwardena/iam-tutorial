@@ -72,13 +72,11 @@ const wso2ISProvider = (req: NextApiRequest, res: NextApiResponse) => NextAuth(r
                     rolesList = [ rolesList ];
                 }
                 if (rolesList == null || rolesList.length === 0) {
-                    session.group = "petOwner";
-                } else if (rolesList.some(x => x === "pet-care-doctor")) {
-                    session.group = "doctor";
-                } else if (rolesList.some(x => x === "pet-care-admin")) {
+                    session.group = "user";
+                } else if (rolesList.some(x => x === "teamspace-admin")) {
                     session.group = "admin";
                 } else {
-                    session.group = "petOwner";
+                    session.group = "user";
                 }
             }
 

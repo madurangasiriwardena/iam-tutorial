@@ -17,14 +17,16 @@
  */
 
 import { AxiosResponse } from "axios";
+import { getMeetingInstance } from "./meetingInstance";
+import { Meeting } from "../../types/meeting";
 import createHeaders from "../createHeaders";
-import { getMeetingInstance } from "../getMeetings/meetingInstance";
 
-export async function getProfile(accessToken: string) {
+
+export async function getMeeting(accessToken: string, doctorId: string) {
     const headers = createHeaders(accessToken);
-    const response = await getMeetingInstance().get("/me", {
+    const response = await getMeetingInstance().get(`meetings/${encodeURI(doctorId)}`, {
         headers: headers
     });
 
-    return response as AxiosResponse<any>;
+    return response as AxiosResponse<Meeting>;
 }

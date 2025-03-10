@@ -16,15 +16,11 @@
  * under the License.
  */
 
-import { AxiosResponse } from "axios";
-import createHeaders from "../createHeaders";
-import { getMeetingInstance } from "../getMeetings/meetingInstance";
+import { getConfig } from "@pet-management-webapp/business-admin-app/util/util-application-config-util";
+import { initInstance } from "../instance";
 
-export async function getProfile(accessToken: string) {
-    const headers = createHeaders(accessToken);
-    const response = await getMeetingInstance().get("/me", {
-        headers: headers
-    });
+export const getMeetingInstance = () => {
+    const conf = getConfig().BusinessAdminAppConfig.resourceServerURLs.meetingService;
 
-    return response as AxiosResponse<any>;
-}
+    return initInstance(conf);
+};

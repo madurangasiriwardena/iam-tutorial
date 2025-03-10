@@ -17,13 +17,13 @@
  */
 
 import { AxiosResponse } from "axios";
-import { OrgInfo } from "../../types/doctor";
+import { OrgInfo } from "../../types/meeting";
 import createHeaders from "../createHeaders";
-import { getDoctorInstance } from "../getDoctors/doctorInstance";
+import { getMeetingInstance } from "../getMeetings/meetingInstance";
 
 export async function getOrgInfo(accessToken: string) {
     const headers = createHeaders(accessToken);
-    const response = await getDoctorInstance().get("org-info", {
+    const response = await getMeetingInstance().get("org-info", {
         headers: headers
     });
 

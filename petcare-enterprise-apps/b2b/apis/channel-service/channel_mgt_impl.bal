@@ -7,7 +7,6 @@ import ballerinax/mysql;
 import ballerina/time;
 import ballerina/http;
 import ballerina/random;
-import ballerina/io;
 
 configurable string dbHost = "localhost";
 configurable string dbUsername = "admin";
@@ -16,7 +15,7 @@ configurable string dbDatabase = "CHANNEL_DB";
 configurable int dbPort = 3306;
 configurable string emailService = "localhost:9090";
 
-table<Doctor> key(org, id) doctorRecords = table [];
+table<Meeting> key(org, id) meetingRecords = table [];
 table<Booking> key(org, id) bookingRecords = table [];
 table<OrgInfo> key(orgName) orgRecords = table [];
 
@@ -64,402 +63,402 @@ function getConnection() returns jdbc:Client|error {
     return dbClient;
 }
 
-function getDoctors(string org) returns Doctor[]|error {
+function getMeetings(string org) returns Meeting[]|error {
 
-    if (useDB) {
-        return dbGetDoctorsByOrg(org);
-    } else {
-        Doctor[] doctorList = [];
-        doctorRecords.forEach(function(Doctor doctor) {
-            if doctor.org == org {
-                doctorList.push(doctor);
+    // if (useDB) {
+    //     return dbGetDoctorsByOrg(org);
+    // } else {
+        Meeting[] meetingList = [];
+        meetingRecords.forEach(function(Meeting meeting) {
+            if meeting.org == org {
+                meetingList.push(meeting);
             }
         });
-        return doctorList;
-    }
+        return meetingList;
+    // }
 }
 
-function getDoctorByIdAndOrg(string org, string doctorId) returns Doctor|()|error {
+// function getDoctorByIdAndOrg(string org, string doctorId) returns Doctor|()|error {
 
-    if (useDB) {
-        return dbGetDoctorByIdAndOrg(org, doctorId);
-    } else {
-        Doctor? doctor = doctorRecords[org, doctorId];
-        if doctor is () {
-            return ();
-        }
-        return doctor;
-    }
-}
+//     if (useDB) {
+//         return dbGetDoctorByIdAndOrg(org, doctorId);
+//     } else {
+//         Doctor? doctor = meetingRecords[org, doctorId];
+//         if doctor is () {
+//             return ();
+//         }
+//         return doctor;
+//     }
+// }
 
-function getDoctorById(string doctorId) returns Doctor|()|error {
+// function getDoctorById(string doctorId) returns Doctor|()|error {
 
-    Doctor doctor = {
-        id: "",
-        org: "",
-        emailAddress: "",
-        address: "",
-        specialty: "",
-        gender: "",
-        registrationNumber: "",
-        name: "",
-        availability: [],
-        createdAt: ""
-    };
-    if (useDB) {
-        return dbGetDoctorByDoctorId(doctorId);
-    } else {
-        foreach Doctor doc in doctorRecords {
-            if doc.id == doctorId {
-                doctor = doc;
-                break;
-            }
-        }
+//     Doctor doctor = {
+//         id: "",
+//         org: "",
+//         emailAddress: "",
+//         address: "",
+//         specialty: "",
+//         gender: "",
+//         registrationNumber: "",
+//         name: "",
+//         availability: [],
+//         createdAt: ""
+//     };
+//     if (useDB) {
+//         return dbGetDoctorByDoctorId(doctorId);
+//     } else {
+//         foreach Doctor doc in meetingRecords {
+//             if doc.id == doctorId {
+//                 doctor = doc;
+//                 break;
+//             }
+//         }
 
-        if doctor.id == "" {
-            return ();
-        }
-        return doctor;
-    }
-}
+//         if doctor.id == "" {
+//             return ();
+//         }
+//         return doctor;
+//     }
+// }
 
-function getDoctorByOrgAndEmail(string org, string emailAddress) returns Doctor|()|error {
+// function getDoctorByOrgAndEmail(string org, string emailAddress) returns Doctor|()|error {
 
-    if (useDB) {
-        return dbGetDoctorByOrgAndEmail(org, emailAddress);
-    } else {
-        foreach Doctor doc in doctorRecords {
-            if doc.org == org && doc.emailAddress == emailAddress {
-                return doc;
-            }
-        }
-        return ();
-    }
+//     if (useDB) {
+//         return dbGetDoctorByOrgAndEmail(org, emailAddress);
+//     } else {
+//         foreach Doctor doc in meetingRecords {
+//             if doc.org == org && doc.emailAddress == emailAddress {
+//                 return doc;
+//             }
+//         }
+//         return ();
+//     }
 
-}
+// }
 
-function updateDoctorById(string org, string doctorId, DoctorItem updatedDoctorItem) returns Doctor|()|error {
+// function updateDoctorById(string org, string doctorId, DoctorItem updatedDoctorItem) returns Doctor|()|error {
 
-    if (useDB) {
-        Doctor|() oldDoctor = check dbGetDoctorByIdAndOrg(org, doctorId);
-        if oldDoctor is () {
-            return ();
-        }
+//     if (useDB) {
+//         Doctor|() oldDoctor = check dbGetDoctorByIdAndOrg(org, doctorId);
+//         if oldDoctor is () {
+//             return ();
+//         }
 
-        Doctor doctor = {id: doctorId, org: org, createdAt: oldDoctor.createdAt, ...updatedDoctorItem};
-        Doctor|error updatedDoctor = dbUpdateDoctor(doctor);
+//         Doctor doctor = {id: doctorId, org: org, createdAt: oldDoctor.createdAt, ...updatedDoctorItem};
+//         Doctor|error updatedDoctor = dbUpdateDoctor(doctor);
 
-        if updatedDoctor is error {
-            return updatedDoctor;
-        }
-        return updatedDoctor;
-    } else {
-        Doctor? oldeDoctorRecord = doctorRecords[org, doctorId];
-        if oldeDoctorRecord is () {
-            return ();
-        }
-        _ = doctorRecords.remove([org, doctorId]);
-        doctorRecords.put({id: doctorId, org: org, createdAt: oldeDoctorRecord.createdAt, ...updatedDoctorItem});
-        Doctor? doctor = doctorRecords[org, doctorId];
-        return doctor;
-    }
-}
+//         if updatedDoctor is error {
+//             return updatedDoctor;
+//         }
+//         return updatedDoctor;
+//     } else {
+//         Doctor? oldeDoctorRecord = meetingRecords[org, doctorId];
+//         if oldeDoctorRecord is () {
+//             return ();
+//         }
+//         _ = meetingRecords.remove([org, doctorId]);
+//         meetingRecords.put({id: doctorId, org: org, createdAt: oldeDoctorRecord.createdAt, ...updatedDoctorItem});
+//         Doctor? doctor = meetingRecords[org, doctorId];
+//         return doctor;
+//     }
+// }
 
-function deleteDoctorById(string org, string doctorId) returns string|()|error {
+// function deleteDoctorById(string org, string doctorId) returns string|()|error {
 
-    if (useDB) {
-        return dbDeleteDoctorById(org, doctorId);
-    } else {
-        Doctor? doctorRecord = doctorRecords[org, doctorId];
-        if doctorRecord is () {
-            return ();
-        }
-        _ = doctorRecords.remove([org, doctorId]);
-        return "Doctor deleted successfully";
-    }
-}
+//     if (useDB) {
+//         return dbDeleteDoctorById(org, doctorId);
+//     } else {
+//         Doctor? doctorRecord = meetingRecords[org, doctorId];
+//         if doctorRecord is () {
+//             return ();
+//         }
+//         _ = meetingRecords.remove([org, doctorId]);
+//         return "Doctor deleted successfully";
+//     }
+// }
 
-function addDoctor(DoctorItem doctorItem, string org) returns Doctor|error {
+function addMeeting(MeetingItem meetingItem, string org) returns Meeting|error {
 
-    string docId = doctorItem.emailAddress;
+    string meetingId = uuid:createType1AsString();
     time:Utc currentUtc = time:utcNow();
     time:Civil currentTime = time:utcToCivil(currentUtc);
     string timeString = civilToIso8601(currentTime);
 
-    Doctor doctor = {
-        id: docId,
+    Meeting doctor = {
+        id: meetingId,
         org: org,
         createdAt: timeString,
-        ...doctorItem
+        ...meetingItem
     };
 
-    if (useDB) {
-        return dbAddDoctor(doctor);
-    } else {
-        doctorRecords.put(doctor);
-        Doctor addedDoctor = <Doctor>doctorRecords[org, docId];
+    // if (useDB) {
+    //     return dbAddDoctor(doctor);
+    // } else {
+        meetingRecords.put(doctor);
+        Meeting addedDoctor = <Meeting>meetingRecords[org, meetingId];
         return addedDoctor;
-    }
+    // }
 }
 
-function updateThumbnailByDoctorId(string org, string doctorId, Thumbnail thumbnail) returns string|()|error {
+// function updateThumbnailByDoctorId(string org, string doctorId, Thumbnail thumbnail) returns string|()|error {
 
-    if (useDB) {
+//     if (useDB) {
 
-        string|()|error deleteResult = dbDeleteThumbnailById(doctorId);
+//         string|()|error deleteResult = dbDeleteThumbnailById(doctorId);
 
-        if deleteResult is error {
-            return deleteResult;
-        }
+//         if deleteResult is error {
+//             return deleteResult;
+//         }
 
-        if thumbnail.fileName != "" {
-            string|error result = dbAddThumbnailById(doctorId, thumbnail);
+//         if thumbnail.fileName != "" {
+//             string|error result = dbAddThumbnailById(doctorId, thumbnail);
 
-            if result is error {
-                return result;
-            }
-        }
+//             if result is error {
+//                 return result;
+//             }
+//         }
 
-        return "Thumbnail updated successfully";
-    } else {
+//         return "Thumbnail updated successfully";
+//     } else {
 
-        string thumbnailKey = getThumbnailKey(org, doctorId);
-        if thumbnail.fileName == "" {
-            if thumbnailMap.hasKey(thumbnailKey) {
-                _ = thumbnailMap.remove(thumbnailKey);
-            }
+//         string thumbnailKey = getThumbnailKey(org, doctorId);
+//         if thumbnail.fileName == "" {
+//             if thumbnailMap.hasKey(thumbnailKey) {
+//                 _ = thumbnailMap.remove(thumbnailKey);
+//             }
 
-        } else {
-            thumbnailMap[thumbnailKey] = thumbnail;
-        }
+//         } else {
+//             thumbnailMap[thumbnailKey] = thumbnail;
+//         }
 
-        return "Thumbnail updated successfully";
-    }
-}
+//         return "Thumbnail updated successfully";
+//     }
+// }
 
-function getThumbnailByDoctorId(string org, string doctorId) returns Thumbnail|()|string|error {
+// function getThumbnailByDoctorId(string org, string doctorId) returns Thumbnail|()|string|error {
 
-    if (useDB) {
+//     if (useDB) {
 
-        Thumbnail|string|error getResult = dbGetThumbnailById(doctorId);
+//         Thumbnail|string|error getResult = dbGetThumbnailById(doctorId);
 
-        if getResult is error {
-            return getResult;
-        } else if getResult is string {
-            return getResult;
-        } else {
-            return <Thumbnail>getResult;
-        }
-    } else {
+//         if getResult is error {
+//             return getResult;
+//         } else if getResult is string {
+//             return getResult;
+//         } else {
+//             return <Thumbnail>getResult;
+//         }
+//     } else {
 
-        string thumbnailKey = getThumbnailKey(org, doctorId);
-        if thumbnailMap.hasKey(thumbnailKey) {
-            Thumbnail thumbnail = <Thumbnail>thumbnailMap[thumbnailKey];
-            return thumbnail;
-        } else {
-            return ();
-        }
-    }
-}
+//         string thumbnailKey = getThumbnailKey(org, doctorId);
+//         if thumbnailMap.hasKey(thumbnailKey) {
+//             Thumbnail thumbnail = <Thumbnail>thumbnailMap[thumbnailKey];
+//             return thumbnail;
+//         } else {
+//             return ();
+//         }
+//     }
+// }
 
-function getBookingsByOrgAndEmail(string org, string email) returns Booking[]|error {
+// function getBookingsByOrgAndEmail(string org, string email) returns Booking[]|error {
 
-    if (useDB) {
-        return dbGetBookingsByOrgAndEmail(org, email);
-    } else {
-        Booking[] bookingList = [];
-        bookingRecords.forEach(function(Booking booking) {
-            if booking.org == org && booking.emailAddress == email {
-                bookingList.push(booking);
-            }
-        });
-        return bookingList;
-    }
-}
+//     if (useDB) {
+//         return dbGetBookingsByOrgAndEmail(org, email);
+//     } else {
+//         Booking[] bookingList = [];
+//         bookingRecords.forEach(function(Booking booking) {
+//             if booking.org == org && booking.emailAddress == email {
+//                 bookingList.push(booking);
+//             }
+//         });
+//         return bookingList;
+//     }
+// }
 
-function getBookingsByDoctorId(string org, string doctorId, string date) returns Booking[]|error {
+// function getBookingsByDoctorId(string org, string doctorId, string date) returns Booking[]|error {
 
-    if (useDB) {
-        return dbGetBookingsByOrgAndDoctorId(org, doctorId, date);
-    } else {
-        Booking[] bookingList = [];
-        bookingRecords.forEach(function(Booking booking) {
-            if date is "" {
-                if booking.org == org && booking.doctorId == doctorId {
-                    bookingList.push(booking);
-                }
-            } else {
-                if booking.org == org && booking.doctorId == doctorId && booking.date == date {
-                    bookingList.push(booking);
-                }
-            }
-        });
+//     if (useDB) {
+//         return dbGetBookingsByOrgAndDoctorId(org, doctorId, date);
+//     } else {
+//         Booking[] bookingList = [];
+//         bookingRecords.forEach(function(Booking booking) {
+//             if date is "" {
+//                 if booking.org == org && booking.doctorId == doctorId {
+//                     bookingList.push(booking);
+//                 }
+//             } else {
+//                 if booking.org == org && booking.doctorId == doctorId && booking.date == date {
+//                     bookingList.push(booking);
+//                 }
+//             }
+//         });
 
-        return bookingList;
-    }
-}
+//         return bookingList;
+//     }
+// }
 
-function getNextAppointmentNumber(string org, string doctorId, string date,
-        string sessionStartTime, string sessionEndTime) returns NextAppointment|()|error {
+// function getNextAppointmentNumber(string org, string doctorId, string date,
+//         string sessionStartTime, string sessionEndTime) returns NextAppointment|()|error {
 
-    boolean isValid = isValidDoctorSession(org, doctorId, date, sessionStartTime, sessionEndTime);
+//     boolean isValid = isValidDoctorSession(org, doctorId, date, sessionStartTime, sessionEndTime);
 
-    if !isValid {
-        return ();
-    }
+//     if !isValid {
+//         return ();
+//     }
 
-    NextAppointment nextAppointment = {
-        date: date,
-        doctorId: doctorId,
-        sessionEndTime: sessionEndTime,
-        sessionStartTime: sessionStartTime,
-        activeBookingCount: 0,
-        nextAppointmentNumber: 0
-    };
+//     NextAppointment nextAppointment = {
+//         date: date,
+//         doctorId: doctorId,
+//         sessionEndTime: sessionEndTime,
+//         sessionStartTime: sessionStartTime,
+//         activeBookingCount: 0,
+//         nextAppointmentNumber: 0
+//     };
 
-    int activeBookingCount = 0;
-    if (useDB) {
-        int result = check dbGetActiveBookingsByDoctorId(org, doctorId, date, sessionStartTime, sessionEndTime);
-        activeBookingCount = result;
-    } else {
-        bookingRecords.forEach(function(Booking booking) {
-            if booking.org == org && booking.doctorId == doctorId && booking.date == date &&
-                    booking.sessionStartTime == sessionStartTime && booking.sessionEndTime == sessionEndTime {
-                activeBookingCount = activeBookingCount + 1;
-            }
-        });
-    }
+//     int activeBookingCount = 0;
+//     if (useDB) {
+//         int result = check dbGetActiveBookingsByDoctorId(org, doctorId, date, sessionStartTime, sessionEndTime);
+//         activeBookingCount = result;
+//     } else {
+//         bookingRecords.forEach(function(Booking booking) {
+//             if booking.org == org && booking.doctorId == doctorId && booking.date == date &&
+//                     booking.sessionStartTime == sessionStartTime && booking.sessionEndTime == sessionEndTime {
+//                 activeBookingCount = activeBookingCount + 1;
+//             }
+//         });
+//     }
 
-    nextAppointment.activeBookingCount = activeBookingCount;
-    nextAppointment.nextAppointmentNumber = activeBookingCount + 1;
+//     nextAppointment.activeBookingCount = activeBookingCount;
+//     nextAppointment.nextAppointmentNumber = activeBookingCount + 1;
 
-    return nextAppointment;
-}
+//     return nextAppointment;
+// }
 
-function isValidDoctorSession(string org, string doctorId, string date,
-        string sessionStartTime, string sessionEndTime) returns boolean {
+// function isValidDoctorSession(string org, string doctorId, string date,
+//         string sessionStartTime, string sessionEndTime) returns boolean {
 
-    boolean isValidDoctorSession = false;
-    Doctor|()|error doctor = getDoctorByIdAndOrg(org, doctorId);
+//     boolean isValidDoctorSession = false;
+//     Doctor|()|error doctor = getDoctorByIdAndOrg(org, doctorId);
 
-    io:println("doctor: ", doctor);
+//     io:println("doctor: ", doctor);
 
-    if doctor is Doctor {
-        Availability[] doctorAvailability = doctor.availability;
+//     if doctor is Doctor {
+//         Availability[] doctorAvailability = doctor.availability;
 
-        foreach Availability availability in doctorAvailability {
-            if availability.date == date {
-                TimeSlot[] timeSlots = availability.timeSlots;
-                foreach TimeSlot timeSlot in timeSlots {
-                    if timeSlot.startTime == sessionStartTime && timeSlot.endTime == sessionEndTime {
-                        isValidDoctorSession = true;
-                        break;
-                    } else {
-                        isValidDoctorSession = false;
-                    }
-                }
-            }
-        }
+//         foreach Availability availability in doctorAvailability {
+//             if availability.date == date {
+//                 TimeSlot[] timeSlots = availability.timeSlots;
+//                 foreach TimeSlot timeSlot in timeSlots {
+//                     if timeSlot.startTime == sessionStartTime && timeSlot.endTime == sessionEndTime {
+//                         isValidDoctorSession = true;
+//                         break;
+//                     } else {
+//                         isValidDoctorSession = false;
+//                     }
+//                 }
+//             }
+//         }
 
-    }
+//     }
 
-    return isValidDoctorSession;
-}
+//     return isValidDoctorSession;
+// }
 
-function addBooking(BookingItem bookingItem, string org, string emailAddress) returns Booking|error {
+// function addBooking(BookingItem bookingItem, string org, string emailAddress) returns Booking|error {
 
-    string bookingId = uuid:createType1AsString();
-    time:Utc currentUtc = time:utcNow();
-    time:Civil currentTime = time:utcToCivil(currentUtc);
-    string timeString = civilToIso8601(currentTime);
-    string refNumber = getReferenceNumber();
+//     string bookingId = uuid:createType1AsString();
+//     time:Utc currentUtc = time:utcNow();
+//     time:Civil currentTime = time:utcToCivil(currentUtc);
+//     string timeString = civilToIso8601(currentTime);
+//     string refNumber = getReferenceNumber();
 
-    NextAppointment|()|error nextAppointment = getNextAppointmentNumber(org, bookingItem.doctorId, bookingItem.date,
-            bookingItem.sessionStartTime, bookingItem.sessionEndTime);
+//     NextAppointment|()|error nextAppointment = getNextAppointmentNumber(org, bookingItem.doctorId, bookingItem.date,
+//             bookingItem.sessionStartTime, bookingItem.sessionEndTime);
 
-    if nextAppointment is NextAppointment {
+//     if nextAppointment is NextAppointment {
 
-        Booking booking = {
-            id: bookingId,
-            org: org,
-            referenceNumber: refNumber,
-            emailAddress: emailAddress,
-            createdAt: timeString,
-            status: CONFIRMED,
-            appointmentNumber: nextAppointment.nextAppointmentNumber,
-            ...bookingItem
-        };
-        if (useDB) {
-            return dbAddBooking(booking);
-        } else {
-            bookingRecords.put(booking);
-            Booking addedBooking = <Booking>bookingRecords[org, bookingId];
-            return addedBooking;
-        }
-    } else if nextAppointment is () {
-        return error("Invalid doctor session");
-    } else {
-        return nextAppointment;
-    }
+//         Booking booking = {
+//             id: bookingId,
+//             org: org,
+//             referenceNumber: refNumber,
+//             emailAddress: emailAddress,
+//             createdAt: timeString,
+//             status: CONFIRMED,
+//             appointmentNumber: nextAppointment.nextAppointmentNumber,
+//             ...bookingItem
+//         };
+//         if (useDB) {
+//             return dbAddBooking(booking);
+//         } else {
+//             bookingRecords.put(booking);
+//             Booking addedBooking = <Booking>bookingRecords[org, bookingId];
+//             return addedBooking;
+//         }
+//     } else if nextAppointment is () {
+//         return error("Invalid doctor session");
+//     } else {
+//         return nextAppointment;
+//     }
 
-}
+// }
 
-function getBookingByIdAndOrg(string org, string bookingId) returns Booking|()|error {
+// function getBookingByIdAndOrg(string org, string bookingId) returns Booking|()|error {
 
-    if (useDB) {
-        return dbGetBookingsByOrgAndId(org, bookingId);
-    } else {
-        Booking? booking = bookingRecords[org, bookingId];
-        if booking is () {
-            return ();
-        }
-        return booking;
-    }
-}
+//     if (useDB) {
+//         return dbGetBookingsByOrgAndId(org, bookingId);
+//     } else {
+//         Booking? booking = bookingRecords[org, bookingId];
+//         if booking is () {
+//             return ();
+//         }
+//         return booking;
+//     }
+// }
 
-function updateBookingById(string org, string bookingId, BookingItemUpdated updatedBookingItem) returns Booking|()|error {
+// function updateBookingById(string org, string bookingId, BookingItemUpdated updatedBookingItem) returns Booking|()|error {
 
-    Booking|()|error oldeBookingRecord = getBookingByIdAndOrg(org, bookingId);
+//     Booking|()|error oldeBookingRecord = getBookingByIdAndOrg(org, bookingId);
 
-    if oldeBookingRecord is error {
-        return oldeBookingRecord;
-    } else if oldeBookingRecord is () {
-        return ();
-    } else {
+//     if oldeBookingRecord is error {
+//         return oldeBookingRecord;
+//     } else if oldeBookingRecord is () {
+//         return ();
+//     } else {
 
-        Booking booking = {
-            id: bookingId,
-            org: org,
-            referenceNumber: oldeBookingRecord.referenceNumber,
-            emailAddress: oldeBookingRecord.emailAddress,
-            createdAt: oldeBookingRecord.createdAt,
-            appointmentNumber: oldeBookingRecord.appointmentNumber,
-            ...updatedBookingItem
-        };
+//         Booking booking = {
+//             id: bookingId,
+//             org: org,
+//             referenceNumber: oldeBookingRecord.referenceNumber,
+//             emailAddress: oldeBookingRecord.emailAddress,
+//             createdAt: oldeBookingRecord.createdAt,
+//             appointmentNumber: oldeBookingRecord.appointmentNumber,
+//             ...updatedBookingItem
+//         };
 
-        if (useDB) {
-            return dbUpdateBooking(booking);
-        } else {
-            bookingRecords.put(booking);
-            Booking? updatedBooking = bookingRecords[org, bookingId];
-            return updatedBooking;
-        }
-    }
-}
+//         if (useDB) {
+//             return dbUpdateBooking(booking);
+//         } else {
+//             bookingRecords.put(booking);
+//             Booking? updatedBooking = bookingRecords[org, bookingId];
+//             return updatedBooking;
+//         }
+//     }
+// }
 
-function deleteBookingById(string org, string bookingId) returns string|()|error {
+// function deleteBookingById(string org, string bookingId) returns string|()|error {
 
-    if (useDB) {
-        return dbDeleteBookingById(bookingId);
-    } else {
-        Booking? bookingRecord = bookingRecords[org, bookingId];
-        if bookingRecord is () {
-            return ();
-        }
-        _ = bookingRecords.remove([org, bookingId]);
-        return "Booking deleted successfully";
-    }
-}
+//     if (useDB) {
+//         return dbDeleteBookingById(bookingId);
+//     } else {
+//         Booking? bookingRecord = bookingRecords[org, bookingId];
+//         if bookingRecord is () {
+//             return ();
+//         }
+//         _ = bookingRecords.remove([org, bookingId]);
+//         return "Booking deleted successfully";
+//     }
+// }
 
 function getOrgInfo(string org) returns OrgInfo|()|error {
 

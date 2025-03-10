@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { getDoctorInstance } from "../getDoctors/doctorInstance";
+import { getMeetingInstance } from "../getMeetings/meetingInstance";
 
 export async function getDocThumbnail(accessToken: string, doctorId: string) {
     const headers = {
@@ -23,7 +23,7 @@ export async function getDocThumbnail(accessToken: string, doctorId: string) {
         "accept": "*/*"
     };
 
-    const response = await getDoctorInstance().get(`doctors/${encodeURIComponent(doctorId)}/thumbnail` , {
+    const response = await getMeetingInstance().get(`doctors/${encodeURIComponent(doctorId)}/thumbnail` , {
         headers: headers,
         responseType: "blob"
     });

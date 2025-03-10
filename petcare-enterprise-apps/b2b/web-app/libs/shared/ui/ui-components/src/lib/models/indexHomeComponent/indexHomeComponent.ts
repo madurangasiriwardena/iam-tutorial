@@ -21,7 +21,7 @@ import { MouseEventHandler } from "react";
 
 export interface IndexHomeComponentProps {
     logoComponent : JSX.Element,
-    image : StaticImageData
+    image? : StaticImageData
     tagText : string
     signinOnClick : MouseEventHandler<HTMLElement>
 }

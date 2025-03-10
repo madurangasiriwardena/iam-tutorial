@@ -18,7 +18,7 @@
 
 import { getConfig } from "@pet-management-webapp/business-admin-app/util/util-application-config-util";
 import { SharedLogoComponent } from "@pet-management-webapp/shared/ui/ui-components";
-import logoImage from "../../../../../ui-assets/src/lib/images/pet_care_logo.png";
+import logoImage from "../../../../../ui-assets/src/lib/images/teamspace_logo.png";
 import { LogoComponentProps } from "../../models/logoComponent/logoComponent";
 
 /**

@@ -36,6 +36,7 @@ export default async function listCurrentApplication(req: NextApiRequest, res: N
     }
     
     const body = JSON.parse(req.body);
+    const accessToken = body.accessToken;
     const session = body.session;
     const orgId = body.orgId;
 
@@ -45,7 +46,12 @@ export default async function listCurrentApplication(req: NextApiRequest, res: N
     try {
         const fetchData = await fetch(
             `${getOrgUrl(orgId)}/api/server/v1/applications?filter=name+eq+${decodedAppName}`,
-            requestOptions(session)
+            session ? requestOptions(session) : {
+                method: "GET",
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
         );
         const data = await fetchData.json();
 

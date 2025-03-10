@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
+ * Copyright (c) 2025, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
  *
  * WSO2 LLC. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -15,15 +15,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import { LogoComponent } from "@pet-management-webapp/business-admin-app/ui/ui-components";
 import { IndexHomeComponent } from "@pet-management-webapp/shared/ui/ui-components";
 import { NextRouter, useRouter } from "next/router";
 import React, { useEffect } from "react";
 import "rsuite/dist/rsuite.min.css";
-import homeImage from "../../../libs/business-admin-app/ui/ui-assets/src/lib/images/businessAdminHome.png";
 import { getPersonalization } from "../APICalls/GetPersonalization/get-personalization";
 import personalize from "../components/sections/sections/settingsSection/personalizationSection/personalize";
 import { Personalization } from "../types/personalization";
+import { SignUp } from "../components/sections/signup";
 
 /**
  * 
@@ -32,6 +33,7 @@ import { Personalization } from "../types/personalization";
 export default function Home() { 
 
     const router: NextRouter = useRouter();
+    const [openSignUpModal, setOpenSignUpModal] = React.useState(false);
 
     const getOrgIdFromUrl = (): string => {
         const currentUrl = window.location.href;
@@ -61,29 +63,32 @@ export default function Home() {
                         const defaultPersonalization: Personalization = {
                             faviconUrl: "https://user-images.githubusercontent.com/1329596/" + 
                                 "242288450-b511d3dd-5e02-434f-9924-3399990fa011.png",
-                            logoAltText: "Pet Care App Logo",
+                            logoAltText: "Teamspace App Logo",
                             logoUrl: "https://user-images.githubusercontent.com/" + 
                                 "35829027/241967420-9358bd5c-636e-48a1-a2d8-27b2aa310ebf.png",
                             org: "",
                             primaryColor: "#4F40EE",
                             secondaryColor: "#E0E1E2"
                         };
-        
-                        personalize(defaultPersonalization);
-                        
+                        personalize(defaultPersonalization);  
                     }
                 });
         }
-        
-        
     }, [ ]);
 
+  const handleCloseSignUpModal = () => {
+    setOpenSignUpModal(false)
+  }
+
     return (
-        <IndexHomeComponent 
-            image={ homeImage }
-            tagText="Sign in to continue"
-            signinOnClick={ signinOnClick }
-            logoComponent = { <LogoComponent imageSize="medium"/> }
-        />
+        <>
+            <IndexHomeComponent 
+                tagText="Sign in to continue"
+                signinOnClick={ signinOnClick }
+                signUpOnClick={ () => setOpenSignUpModal(true) }
+                logoComponent = { <LogoComponent imageSize="medium"/> }
+            />
+            <SignUp open={openSignUpModal} onClose={handleCloseSignUpModal} />
+        </>
     );
 }

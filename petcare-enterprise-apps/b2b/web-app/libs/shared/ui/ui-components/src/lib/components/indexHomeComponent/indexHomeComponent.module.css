@@ -49,6 +49,14 @@
     flex-direction: column;
     flex-wrap: nowrap;
     flex: 1;
+    gap: 3rem;
+
+    .image {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        gap: 1rem;
+    }
 }
 
 .signInDiv hr {
@@ -59,7 +67,6 @@
 .signInDivButton {
     border: none;
     width: 200px;
-    position: absolute;
     font-size: 2vh;
     height: 45px;
     font-size: 18px;
@@ -70,7 +77,11 @@
     padding: 14px 24px;
     background-color: #69A2F4;
     color: #ffffff;
+}
 
+.signUpDivButton {
+    height: 45px;
+    font-size: 1rem;
 }
 
 .buttonTag {

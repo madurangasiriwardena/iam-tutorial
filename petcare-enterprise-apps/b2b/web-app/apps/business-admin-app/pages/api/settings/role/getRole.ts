@@ -29,14 +29,28 @@ export default async function getRole(req: NextApiRequest, res: NextApiResponse)
 
     const body = JSON.parse(req.body);
     const session = body.session;
+    const accessToken = body.accessToken;
     const orgId: string = req.query.orgId.toString();
-    const roleId: string = req.query.roleId.toString();
+    const roleId: string = req.query.roleId?.toString();
+    const adminRoleName: string = req.query.adminRoleName?.toString();
+    const roleAudienceValue: string = req.query.roleAudienceValue?.toString();
+
+    let url = `${getOrgUrl(orgId)}/scim2/v2/Roles`;
+
+    if (roleId) {
+        url += `/${roleId}`;
+    } else if (adminRoleName && roleAudienceValue) {
+        url += `?filter=displayName eq ${adminRoleName} and audience.value eq ${roleAudienceValue}`;
+    }
 
     try {
-        const fetchData = await fetch(
-            `${getOrgUrl(orgId)}/scim2/v2/Roles/${roleId}`,
-            requestOptions(session)
-        );
+        const fetchData = await fetch(url, session ? requestOptions(session) : {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+          });
         const data = await fetchData.json();
 
         res.status(200).json(data);

@@ -16,7 +16,6 @@
  * under the License.
  */
 
-import Image from "next/image";
 import { Button } from "rsuite";
 import styles from "./indexHomeComponent.module.css";
 import { IndexHomeComponentProps } from "../../models/indexHomeComponent/indexHomeComponent";
@@ -24,42 +23,35 @@ import { IndexHomeComponentProps } from "../../models/indexHomeComponent/indexHo
 /**
  * First page component
  * 
- * @param prop - image, tagText, signinOnClick
+ * @param prop - tagText, signinOnClick
  */
 export function IndexHomeComponent(prop: IndexHomeComponentProps) {
 
-    const { logoComponent, image, signinOnClick } = prop;
+    const { logoComponent, signinOnClick, signUpOnClick } = prop;
 
     return (
         <div>
-            
-
             <main className={ styles["main"] }>
-                
                 <div className={ styles["signInDiv"] }>
                     { logoComponent }
-
-                    <br />
-                    <br />
-                    <br />
-
+                    <div className={ styles["image"] }>
                     <Button
                         className={ styles["signInDivButton"] }
                         size="md"
                         appearance="primary"
                         onClick={ signinOnClick }>
-                        Get started
+                        Sign In
                     </Button>
-                    <Image
-                        src={ image }
-                        alt="home image"
-                        className={ styles["homeImage"] }
-                    />
-
+                    <Button
+                        className={ styles["signUpDivButton"] }
+                        size="md"
+                        appearance="ghost"
+                        onClick={ signUpOnClick }>
+                        Sign Up
+                    </Button>
+                    </div>
                 </div>
-
             </main>
-            
         </div>
     );
 }

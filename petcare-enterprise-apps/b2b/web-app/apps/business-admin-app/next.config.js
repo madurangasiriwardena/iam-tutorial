@@ -40,6 +40,7 @@ const nextConfig = withNx({
 
     },
     publicRuntimeConfig: {
+        adminRole: process.env.ADMIN_ROLE_NAME,
         baseOrgUrl: process.env.BASE_ORG_URL,
         baseUrl: process.env.BASE_URL,
         channellingServiceUrl: process.env.CHANNELLING_SERVICE_URL,

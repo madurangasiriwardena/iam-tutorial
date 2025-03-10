@@ -31,6 +31,10 @@
                 "groups",
                 "roles",
                 "internal_login",
+                "internal_organization_create",
+                "internal_organization_view",
+                "internal_user_mgt_view",
+                "internal_user_mgt_create",
                 "internal_org_user_mgt_view",
                 "internal_org_user_mgt_list",
                 "internal_org_user_mgt_update",
@@ -80,8 +84,8 @@
                 "internal_org_claim_meta_delete"
             ],
             "Branding": {
-                "name": "Pet Care App",
-                "tag": "Helping you to take good care  of your pets"
+                "name": "Teamspace",
+                "tag": "Connect and Collaborate"
             }
         },
         "resourceServerURLs": {

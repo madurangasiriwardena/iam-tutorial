@@ -35,6 +35,9 @@ export default function Home() {
     const router: NextRouter = useRouter();
     const [openSignUpModal, setOpenSignUpModal] = React.useState(false);
 
+    const [isSignUpButtonVisible, setIsSignUpButtonVisible] = React.useState(true);
+
+
     const getOrgIdFromUrl = (): string => {
         const currentUrl = window.location.href;
         const url = new URL(currentUrl);
@@ -73,6 +76,7 @@ export default function Home() {
                         personalize(defaultPersonalization);  
                     }
                 });
+            setIsSignUpButtonVisible(false)
         }
     }, [ ]);
 
@@ -87,6 +91,7 @@ export default function Home() {
                 signinOnClick={ signinOnClick }
                 signUpOnClick={ () => setOpenSignUpModal(true) }
                 logoComponent = { <LogoComponent imageSize="medium"/> }
+                isSignUpButtonVisible={ isSignUpButtonVisible }
             />
             <SignUp open={openSignUpModal} onClose={handleCloseSignUpModal} />
         </>

@@ -16,15 +16,15 @@
  * under the License.
  */
 
-import { AxiosResponse } from "axios";
+import { MeetingInfo } from "../../types/meeting";
 import createHeaders from "../createHeaders";
 import { getMeetingInstance } from "../getMeetings/meetingInstance";
 
-export async function getProfile(accessToken: string) {
+export async function putMeeting(accessToken: string, doctorId: string, payload?: MeetingInfo) {
     const headers = createHeaders(accessToken);
-    const response = await getMeetingInstance().get("/me", {
+    const response = await getMeetingInstance().put(`meetings/${encodeURIComponent(doctorId)}`, payload, {
         headers: headers
     });
 
-    return response as AxiosResponse<any>;
+    return response;
 }

@@ -43,7 +43,7 @@ const nextConfig = withNx({
         adminRole: process.env.ADMIN_ROLE_NAME,
         baseOrgUrl: process.env.BASE_ORG_URL,
         baseUrl: process.env.BASE_URL,
-        channellingServiceUrl: process.env.CHANNELLING_SERVICE_URL,
+        meetingServiceUrl: process.env.MEETING_SERVICE_URL,
         clientId: process.env.CLIENT_ID,
         hostedUrl: process.env.HOSTED_URL,
         personalizationServiceUrl: process.env.PERSONALIZATION_SERVICE_URL,

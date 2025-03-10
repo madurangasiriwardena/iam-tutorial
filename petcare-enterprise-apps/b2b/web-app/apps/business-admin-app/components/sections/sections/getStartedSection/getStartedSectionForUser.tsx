@@ -21,11 +21,11 @@ import { Container, Typography, Button, Grid, Paper } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Session } from "next-auth";
 
-interface GetStartedSectionComponentForAdminProps {
+interface GetStartedSectionComponentForUserProps {
     session: Session;
 }
 
-const GetStartedSectionComponentForAdmin: React.FC<GetStartedSectionComponentForAdminProps> = ({ session }) => {
+const GetStartedSectionComponentForUser: React.FC<GetStartedSectionComponentForUserProps> = ({ session }) => {
     return (
         <Container maxWidth="md">
             <Paper elevation={3} style={{ padding: "20px", marginTop: "20px" }}>
@@ -56,4 +56,4 @@ const GetStartedSectionComponentForAdmin: React.FC<GetStartedSectionComponentFor
     );
 };
 
-export default GetStartedSectionComponentForAdmin;
+export default GetStartedSectionComponentForUser;

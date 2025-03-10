@@ -43,7 +43,7 @@ interface ConfigObject {
       };
     };
     resourceServerURLs: {
-      channellingService?: string;
+      meetingService?: string;
       petManagementService?: string;
       personalizationService?: string;
     };
@@ -94,7 +94,7 @@ export function getConfig(): ConfigObject {
                 AdminRole: publicRuntimeConfig.AdminRole
             },
             resourceServerURLs: {
-                channellingService: publicRuntimeConfig.channellingServiceUrl,
+                meetingService: publicRuntimeConfig.meetingServiceUrl,
                 personalizationService: publicRuntimeConfig.personalizationServiceUrl,
                 petManagementService: publicRuntimeConfig.petManagementServiceUrl
             }

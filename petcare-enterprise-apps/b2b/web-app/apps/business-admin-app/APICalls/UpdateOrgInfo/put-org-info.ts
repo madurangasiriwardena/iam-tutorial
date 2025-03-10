@@ -16,13 +16,13 @@
  * under the License.
  */
 
-import { UpdateOrgInfo } from "../../types/doctor";
+import { UpdateOrgInfo } from "../../types/meeting";
 import createHeaders from "../createHeaders";
-import { getDoctorInstance } from "../getDoctors/doctorInstance";
+import { getMeetingInstance } from "../getMeetings/meetingInstance";
 
 export async function putOrgInfo(accessToken: string, payload?: UpdateOrgInfo) {
     const headers = createHeaders(accessToken);
-    const response = await getDoctorInstance().put("org-info" , payload, {
+    const response = await getMeetingInstance().put("org-info" , payload, {
         headers: headers
     });
 

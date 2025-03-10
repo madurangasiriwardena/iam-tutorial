@@ -16,15 +16,36 @@
  * under the License.
  */
 
-import { AxiosResponse } from "axios";
-import createHeaders from "../createHeaders";
-import { getMeetingInstance } from "../getMeetings/meetingInstance";
+export interface Meeting {
+    topic: string;
+    date: string;
+    startTime: string;
+    duration: string;
+    timeZone: string;
+    createdAt: string;
+    id: string;
+    org: string;
+}
 
-export async function getProfile(accessToken: string) {
-    const headers = createHeaders(accessToken);
-    const response = await getMeetingInstance().get("/me", {
-        headers: headers
-    });
+export interface MeetingInfo {
+    topic: string;
+    date: string;
+    startTime: string;
+    duration: string;
+    timeZone: string;
+}
 
-    return response as AxiosResponse<any>;
+export interface OrgInfo {
+    address: string;
+    name: string;
+    registrationNumber: string;
+    telephoneNumber: string;
+    orgName: string;
+}
+
+export interface UpdateOrgInfo {
+    address: string;
+    name: string;
+    registrationNumber: string;
+    telephoneNumber: string;
 }

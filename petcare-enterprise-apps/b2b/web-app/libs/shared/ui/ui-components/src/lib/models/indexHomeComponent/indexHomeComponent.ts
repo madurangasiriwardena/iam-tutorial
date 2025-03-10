@@ -24,4 +24,5 @@ export interface IndexHomeComponentProps {
     image? : StaticImageData
     tagText : string
     signinOnClick : MouseEventHandler<HTMLElement>
+    signUpOnClick : MouseEventHandler<HTMLElement>
 }

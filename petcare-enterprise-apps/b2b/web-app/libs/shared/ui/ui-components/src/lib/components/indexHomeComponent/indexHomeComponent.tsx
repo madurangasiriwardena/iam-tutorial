@@ -27,7 +27,7 @@ import { IndexHomeComponentProps } from "../../models/indexHomeComponent/indexHo
  */
 export function IndexHomeComponent(prop: IndexHomeComponentProps) {
 
-    const { logoComponent, signinOnClick } = prop;
+    const { logoComponent, signinOnClick, signUpOnClick } = prop;
 
     return (
         <div>
@@ -46,7 +46,7 @@ export function IndexHomeComponent(prop: IndexHomeComponentProps) {
                         className={ styles["signUpDivButton"] }
                         size="md"
                         appearance="ghost"
-                        onClick={ signinOnClick }>
+                        onClick={ signUpOnClick }>
                         Sign Up
                     </Button>
                     </div>

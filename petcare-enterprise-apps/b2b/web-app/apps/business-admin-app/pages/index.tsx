@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
+ * Copyright (c) 2025, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
  *
  * WSO2 LLC. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -15,6 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import { LogoComponent } from "@pet-management-webapp/business-admin-app/ui/ui-components";
 import { IndexHomeComponent } from "@pet-management-webapp/shared/ui/ui-components";
 import { NextRouter, useRouter } from "next/router";
@@ -23,6 +24,7 @@ import "rsuite/dist/rsuite.min.css";
 import { getPersonalization } from "../APICalls/GetPersonalization/get-personalization";
 import personalize from "../components/sections/sections/settingsSection/personalizationSection/personalize";
 import { Personalization } from "../types/personalization";
+import { SignUp } from "../components/sections/signup";
 
 /**
  * 
@@ -31,6 +33,7 @@ import { Personalization } from "../types/personalization";
 export default function Home() { 
 
     const router: NextRouter = useRouter();
+    const [openSignUpModal, setOpenSignUpModal] = React.useState(false);
 
     const getOrgIdFromUrl = (): string => {
         const currentUrl = window.location.href;
@@ -73,11 +76,19 @@ export default function Home() {
         }
     }, [ ]);
 
+  const handleCloseSignUpModal = () => {
+    setOpenSignUpModal(false)
+  }
+
     return (
-        <IndexHomeComponent 
-            tagText="Sign in to continue"
-            signinOnClick={ signinOnClick }
-            logoComponent = { <LogoComponent imageSize="medium"/> }
-        />
+        <>
+            <IndexHomeComponent 
+                tagText="Sign in to continue"
+                signinOnClick={ signinOnClick }
+                signUpOnClick={ () => setOpenSignUpModal(true) }
+                logoComponent = { <LogoComponent imageSize="medium"/> }
+            />
+            <SignUp open={openSignUpModal} onClose={handleCloseSignUpModal} />
+        </>
     );
 }

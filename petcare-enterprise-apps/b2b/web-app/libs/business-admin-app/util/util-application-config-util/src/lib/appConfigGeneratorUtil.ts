@@ -49,7 +49,8 @@ interface ConfigObject {
     };
     ManagementAPIConfig: {
       SharedApplicationName: string,
-      UserStore: string
+      UserStore: string,
+      AdminRole: string
     };
   };
 }
@@ -89,7 +90,8 @@ export function getConfig(): ConfigObject {
             },
             ManagementAPIConfig: {
                 SharedApplicationName: publicRuntimeConfig.sharedAppName,
-                UserStore: config.BusinessAdminAppConfig.ManagementAPIConfig.UserStore
+                UserStore: config.BusinessAdminAppConfig.ManagementAPIConfig.UserStore,
+                AdminRole: publicRuntimeConfig.AdminRole
             },
             resourceServerURLs: {
                 channellingService: publicRuntimeConfig.channellingServiceUrl,

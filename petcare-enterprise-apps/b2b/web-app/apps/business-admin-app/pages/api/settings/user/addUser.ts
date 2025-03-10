@@ -36,6 +36,7 @@ export default async function addUser(req, res) {
     }
 
     const body = JSON.parse(req.body);
+    const accessToken = body.accessToken;
     const session = body.session;
     const orgId = body.orgId;
     const user = body.param;
@@ -43,7 +44,19 @@ export default async function addUser(req, res) {
     try {
         const fetchData = await fetch(
             `${getOrgUrl(orgId)}/scim2/Users`,
-            requestOptionsWithBody(session, RequestMethod.POST, user)
+            session ? requestOptionsWithBody(session, RequestMethod.POST, user) : {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  emails: [{ primary: true, value: user.email }],
+                  name: { familyName: user.lastName, givenName: user.firstName },
+                  password: user.password,
+                  userName: `DEFAULT/${user.email}`,
+                }),
+              }
         );
         const data = await fetchData.json();
 

@@ -29,6 +29,8 @@ export default async function patchRole(req: NextApiRequest, res: NextApiRespons
     }
 
     const body = JSON.parse(req.body);
+    const accessToken = body.accessToken;
+    const userId = body.userId;
     const session = body.session;
     const patchBody = body.param;
     const roleId = req.query.roleId;
@@ -37,7 +39,17 @@ export default async function patchRole(req: NextApiRequest, res: NextApiRespons
     try {
         const fetchData = await fetch(
             `${getOrgUrl(orgId)}/scim2/v2/Roles/${roleId}`,
-            requestOptionsWithBody(session, RequestMethod.PATCH, patchBody)
+            session ? requestOptionsWithBody(session, RequestMethod.PATCH, patchBody) :
+            {
+                method: "PATCH",
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  Operations: [{ op: "add", path: "users", value: [{ value: userId }] }],
+                }),
+            }
         );
 
         const data = await fetchData.json();

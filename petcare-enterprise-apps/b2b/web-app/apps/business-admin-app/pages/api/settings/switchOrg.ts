@@ -26,8 +26,7 @@ import { NextApiRequest, NextApiResponse } from "next";
  * @returns get the basic auth for authorize the switch call
  */
 const getBasicAuth = (): string => Buffer
-    // eslint-disable-next-line
-    .from(`${process.env.MANAGEMENT_APP_CLIENT_ID}:${process.env.MANAGEMENT_APP_CLIENT_SECRET}`).toString("base64");
+    .from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString("base64");
 
 /**
  * 

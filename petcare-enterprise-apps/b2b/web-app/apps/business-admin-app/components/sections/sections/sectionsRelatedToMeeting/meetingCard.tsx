@@ -51,6 +51,7 @@ function MeetingCard(props: MeetingCardProps) {
                     <div className={styles.meetingDetails}>
                         <span className={styles.meetingTopic}>{meeting.topic}</span>
                         <div className={styles.meetingInfo}>
+                            <span className={styles.meetingTime}>{meeting.date}</span>
                             <span className={styles.meetingTime}>{meeting.startTime}</span>
                             <span className={styles.meetingId}>{meeting.id}</span>
                         </div>

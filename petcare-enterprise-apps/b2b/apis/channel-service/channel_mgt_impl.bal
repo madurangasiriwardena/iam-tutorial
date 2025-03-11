@@ -137,46 +137,46 @@ function getMeetings(string org) returns Meeting[]|error {
 
 // }
 
-// function updateDoctorById(string org, string doctorId, DoctorItem updatedDoctorItem) returns Doctor|()|error {
+function updateMeetingById(string org, string meetingId, MeetingItem updatedMeetingItem) returns Meeting|()|error {
 
-//     if (useDB) {
-//         Doctor|() oldDoctor = check dbGetDoctorByIdAndOrg(org, doctorId);
-//         if oldDoctor is () {
-//             return ();
-//         }
+    // if (useDB) {
+    //     Meeting|() oldDoctor = check dbGetDoctorByIdAndOrg(org, meetingId);
+    //     if oldDoctor is () {
+    //         return ();
+    //     }
 
-//         Doctor doctor = {id: doctorId, org: org, createdAt: oldDoctor.createdAt, ...updatedDoctorItem};
-//         Doctor|error updatedDoctor = dbUpdateDoctor(doctor);
+    //     Meeting doctor = {id: meetingId, org: org, createdAt: oldDoctor.createdAt, ...updatedMeetingItem};
+    //     Doctor|error updatedDoctor = dbUpdateDoctor(doctor);
 
-//         if updatedDoctor is error {
-//             return updatedDoctor;
-//         }
-//         return updatedDoctor;
-//     } else {
-//         Doctor? oldeDoctorRecord = meetingRecords[org, doctorId];
-//         if oldeDoctorRecord is () {
-//             return ();
-//         }
-//         _ = meetingRecords.remove([org, doctorId]);
-//         meetingRecords.put({id: doctorId, org: org, createdAt: oldeDoctorRecord.createdAt, ...updatedDoctorItem});
-//         Doctor? doctor = meetingRecords[org, doctorId];
-//         return doctor;
-//     }
-// }
+    //     if updatedDoctor is error {
+    //         return updatedDoctor;
+    //     }
+    //     return updatedDoctor;
+    // } else {
+        Meeting? oldeMeetingRecord = meetingRecords[org, meetingId];
+        if oldeMeetingRecord is () {
+            return ();
+        }
+        _ = meetingRecords.remove([org, meetingId]);
+        meetingRecords.put({id: meetingId, org: org, createdAt: oldeMeetingRecord.createdAt, ...updatedMeetingItem});
+        Meeting? meeting = meetingRecords[org, meetingId];
+        return meeting;
+    // }
+}
 
-// function deleteDoctorById(string org, string doctorId) returns string|()|error {
+function deleteDoctorById(string org, string meetingId) returns string|()|error {
 
-//     if (useDB) {
-//         return dbDeleteDoctorById(org, doctorId);
-//     } else {
-//         Doctor? doctorRecord = meetingRecords[org, doctorId];
-//         if doctorRecord is () {
-//             return ();
-//         }
-//         _ = meetingRecords.remove([org, doctorId]);
-//         return "Doctor deleted successfully";
-//     }
-// }
+    if (useDB) {
+        return dbDeleteDoctorById(org, meetingId);
+    } else {
+        Meeting? doctorRecord = meetingRecords[org, meetingId];
+        if doctorRecord is () {
+            return ();
+        }
+        _ = meetingRecords.remove([org, meetingId]);
+        return "Doctor deleted successfully";
+    }
+}
 
 function addMeeting(MeetingItem meetingItem, string org) returns Meeting|error {
 

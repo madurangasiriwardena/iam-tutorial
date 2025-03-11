@@ -7,7 +7,8 @@ UserInfoResolver userInfoResolver = new;
 # bound to port `9091`.
 @http:ServiceConfig {
     cors: {
-        allowOrigins: ["*"]
+        allowOrigins: ["*"],
+        allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     }
 }
 service / on new http:Listener(9091) {
@@ -55,23 +56,23 @@ service / on new http:Listener(9091) {
     //     return result;
     // }
 
-    // # Update a doctor
-    // # + doctorId - ID of the doctor
-    // # + updatedDoctorItem - updated doctor details
-    // # + return - Doctor details or not found 
-    // resource function put doctors/[string doctorId](http:Headers headers, @http:Payload DoctorItem updatedDoctorItem) returns Doctor|http:NotFound|error? {
+    # Update a doctor
+    # + doctorId - ID of the doctor
+    # + updatedMeetingItem - updated doctor details
+    # + return - Doctor details or not found 
+    resource function put meetings/[string meetingId](http:Headers headers, @http:Payload MeetingItem updatedMeetingItem) returns Meeting|http:NotFound|error? {
 
-    //     UserInfo|error userInfo = userInfoResolver.retrieveUserInfo(headers);
-    //     if userInfo is error {
-    //         return userInfo;
-    //     }
+        UserInfo|error userInfo = userInfoResolver.retrieveUserInfo(headers);
+        if userInfo is error {
+            return userInfo;
+        }
 
-    //     Doctor|()|error result = updateDoctorById(userInfo.organization, doctorId, updatedDoctorItem);
-    //     if result is () {
-    //         return http:NOT_FOUND;
-    //     }
-    //     return result;
-    // }
+        Meeting|()|error result = updateMeetingById(userInfo.organization, meetingId, updatedMeetingItem);
+        if result is () {
+            return http:NOT_FOUND;
+        }
+        return result;
+    }
 
     // # Delete a doctor
     // # + doctorId - ID of the doctor

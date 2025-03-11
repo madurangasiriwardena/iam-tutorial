@@ -27,6 +27,8 @@ import MeetingCard from "./meetingCard";
 import MeetingOverview from "./meetingOverview";
 import styles from "../../../../styles/meeting.module.css";
 import ScheduleMeetingComponent from "./scheduleMeetingComponent";
+import {putMeeting} from "../../../../APICalls/UpdateMeeting/put-meeting";
+import {deleteMeeting} from "../../../../APICalls/DeleteMeeting/delete-meeting";
 
 interface ManageMeetingsSectionProps {
     session: Session
@@ -82,6 +84,11 @@ export default function ManageMeetingsSection(props: ManageMeetingsSectionProps)
         setIsMeetingOverviewOpen(false);
     };
 
+    const handleDelete = async (meetingId: string) => {
+        const accessToken = session.accessToken;
+        await deleteMeeting(accessToken, meetingId);
+    };
+
     return (
         <div className={ styles.tableMainPanelDivDoc }>
             <Stack direction="row" justifyContent="space-between">
@@ -113,7 +120,7 @@ export default function ManageMeetingsSection(props: ManageMeetingsSectionProps)
                                              }} onEdit={function (meetingId: string): void {
                                     setIsMeetingEditOpen(true)
                                 }} onDelete={function (meetingId: string): void {
-                                    throw new Error("Function not implemented.");
+                                    handleDelete(meetingId)
                                 }} />
                             </div>
                         )) }

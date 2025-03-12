@@ -25,6 +25,8 @@ import { getPersonalization } from "../APICalls/GetPersonalization/get-personali
 import personalize from "../components/sections/sections/settingsSection/personalizationSection/personalize";
 import { Personalization } from "../types/personalization";
 import { SignUp } from "../components/sections/signup";
+import logoImage from "../../../libs/business-admin-app/ui/ui-assets/src/lib/images/teamspace_logo.png";
+import favicon from "../../../libs/business-admin-app/ui/ui-assets/src/lib/images/teamspace_favicon.png";
 
 /**
  * 
@@ -36,7 +38,6 @@ export default function Home() {
     const [openSignUpModal, setOpenSignUpModal] = React.useState(false);
 
     const [isSignUpButtonVisible, setIsSignUpButtonVisible] = React.useState(true);
-
 
     const getOrgIdFromUrl = (): string => {
         const currentUrl = window.location.href;
@@ -64,11 +65,9 @@ export default function Home() {
                 .catch(async (err) => {
                     if (err.response.status === 404) {
                         const defaultPersonalization: Personalization = {
-                            faviconUrl: "https://user-images.githubusercontent.com/1329596/" + 
-                                "242288450-b511d3dd-5e02-434f-9924-3399990fa011.png",
+                            faviconUrl: favicon.src,
                             logoAltText: "Teamspace App Logo",
-                            logoUrl: "https://user-images.githubusercontent.com/" + 
-                                "35829027/241967420-9358bd5c-636e-48a1-a2d8-27b2aa310ebf.png",
+                            logoUrl: logoImage.src,
                             org: "",
                             primaryColor: "#4F40EE",
                             secondaryColor: "#E0E1E2"

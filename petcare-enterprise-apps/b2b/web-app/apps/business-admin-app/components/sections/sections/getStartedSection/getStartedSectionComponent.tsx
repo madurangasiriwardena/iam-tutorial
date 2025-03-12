@@ -19,7 +19,6 @@
 import Image from "next/image";
 import { FlexboxGrid } from "rsuite";
 import GetStartedText from "./otherComponents/getStartedText";
-import getStartedImage from "../../../../../../libs/business-admin-app/ui/ui-assets/src/lib/images/getStarted.png";
 
 /**
  * 
@@ -31,9 +30,6 @@ export default function GetStartedSectionComponent() {
         <FlexboxGrid align="middle" justify="space-between" style={ { height: "100%" } }>
             <FlexboxGrid.Item colspan={ 14 }>
                 <GetStartedText />
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item colspan={ 9 }>
-                <Image src={ getStartedImage } alt="profile image" width={ 500 } />
             </FlexboxGrid.Item>
         </FlexboxGrid>
     );

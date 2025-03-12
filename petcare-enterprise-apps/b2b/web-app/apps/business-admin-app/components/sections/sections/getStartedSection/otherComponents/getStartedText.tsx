@@ -34,10 +34,6 @@ export default function GetStartedText() {
                         <LogoComponent imageSize="medium" />
                     </Stack>
 
-                    <p className={ styles.getStartedSectionComponentGetStartedTextP }>
-                        Schedule appointments & keep your furry friend healthy – all at your fingertips.
-                    </p>
-
                     <Stack direction="column" spacing={ 20 } justifyContent="center">
                         <h4>Select one of the settings to get started</h4>
                         <Button appearance="ghost" size="lg" className={ styles.getStartedButton }>

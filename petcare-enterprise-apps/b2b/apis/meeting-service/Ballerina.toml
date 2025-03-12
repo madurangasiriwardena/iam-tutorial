@@ -1,8 +1,8 @@
 [package]
 org = "WSO2"
-name = "channel_service"
+name = "meeting_service"
 version = "1.0.0"
-export = ["channel_service"]
+export = ["meeting_service"]
 distribution = "2201.5.0"
 
 [build-options]

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
+ * Copyright (c) 2025, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
  *
  * WSO2 LLC. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -16,47 +16,59 @@
  * under the License.
  */
 
-import { requestOptionsWithBody } 
-    from "@pet-management-webapp/business-admin-app/data-access/data-access-common-api-util";
-import { RequestMethod, dataNotRecievedError, notPostError } from
-    "@pet-management-webapp/shared/data-access/data-access-common-api-util";
+import { requestOptionsWithBody } from "@pet-management-webapp/business-admin-app/data-access/data-access-common-api-util";
+import {
+  RequestMethod,
+  dataNotRecievedError,
+  notPostError,
+} from "@pet-management-webapp/shared/data-access/data-access-common-api-util";
 import { getOrgUrl } from "@pet-management-webapp/shared/util/util-application-config-util";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function patchRole(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== "POST") {
-        notPostError(res);
+export default async function patchRole(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== "POST") {
+    notPostError(res);
+  }
+
+  const body = JSON.parse(req.body);
+  const accessToken = body.accessToken;
+  const userId = body.userId;
+  const session = body.session;
+  const patchBody = body.param;
+  const roleId = req.query.roleId;
+  const orgId = "";
+
+  try {
+    const fetchData = await fetch(
+      `${getOrgUrl(orgId)}/scim2/v2/Roles/${roleId}`,
+      session
+        ? requestOptionsWithBody(session, RequestMethod.PATCH, patchBody)
+        : {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              Operations: [
+                { op: "add", path: "users", value: [{ value: userId }] },
+              ],
+            }),
+          }
+    );
+
+    const data = await fetchData.json();
+
+    if (!fetchData.ok) {
+      return res.status(fetchData.status).json(data);
     }
 
-    const body = JSON.parse(req.body);
-    const accessToken = body.accessToken;
-    const userId = body.userId;
-    const session = body.session;
-    const patchBody = body.param;
-    const roleId = req.query.roleId;
-    const orgId = "";
+    res.status(fetchData.status).json(data);
+  } catch (err) {
 
-    try {
-        const fetchData = await fetch(
-            `${getOrgUrl(orgId)}/scim2/v2/Roles/${roleId}`,
-            session ? requestOptionsWithBody(session, RequestMethod.PATCH, patchBody) :
-            {
-                method: "PATCH",
-                headers: {
-                  Authorization: `Bearer ${accessToken}`,
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  Operations: [{ op: "add", path: "users", value: [{ value: userId }] }],
-                }),
-            }
-        );
-
-        const data = await fetchData.json();
-
-        res.status(200).json(data);
-    } catch (err) {
-
-        return dataNotRecievedError(res);
-    }
+    return dataNotRecievedError(res);
+  }
 }

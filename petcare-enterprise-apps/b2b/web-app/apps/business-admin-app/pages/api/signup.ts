@@ -1,14 +1,32 @@
+/**
+ * Copyright (c) 2025, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
+ *
+ * WSO2 LLC. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 import type { NextApiRequest, NextApiResponse } from "next";
 import { notPostError } from "@pet-management-webapp/shared/data-access/data-access-common-api-util";
 import getToken from "./clientCredentials";
 import validateOrgName from "./createTeam/checkName";
 import createOrg from "./createTeam/addTeam";
-import addUser from "./settings/user/addUser";
 import listCurrentApplication from "./settings/application/listCurrentApplication";
 import getRole from "./settings/role/getRole";
-import patchRole from "./settings/role/patchRole";
 import switchOrg from "./settings/switchOrg";
-import { getConfig } from "@pet-management-webapp/business-admin-app/util/util-application-config-util";
+import pollForDefaultUserstore from "./helpers/pollUserstore";
+import pollForUserCreation from "./helpers/pollUser";
+import pollforRolePatching from "./helpers/pollRolePatch";
 
 /**
  * Signup handler to onboard user and team.
@@ -29,13 +47,7 @@ export default async function handler(
   const { firstName, lastName, email, password, organizationName, appName } =
     req.body;
 
-  if (
-    !firstName ||
-    !lastName ||
-    !email ||
-    !password ||
-    !organizationName
-  ) {
+  if (!firstName || !lastName || !email || !password || !organizationName) {
     return res.status(400).json({
       error:
         "All fields are required: Email, Password, First Name, Last Name and Team Name",
@@ -127,42 +139,38 @@ export default async function handler(
 
     accessToken = switchOrgRes.data.access_token;
 
-    // Step 5: Create user using the existing addUser function
-    const addUserReq = {
-      method: "POST",
-      body: JSON.stringify({
-        accessToken,
-        orgId,
-        param: {
-          firstName,
-          lastName,
-          email,
-          password,
-        },
-      }),
-    } as unknown as NextApiRequest;
+    // Step 5: Check for DEFAULT userstore
+    const defaultUserstoreExists = await pollForDefaultUserstore(
+      accessToken,
+      orgId
+    );
 
-    const addUserRes = {
-      status: function (code) {
-        this.statusCode = code;
-        return this;
-      },
-      json: function (data) {
-        this.data = data;
-        return this;
-      },
-    } as unknown as NextApiResponse;
-
-    await addUser(addUserReq, addUserRes);
-
-    if (addUserRes.statusCode !== 200) {
-      return res.status(addUserRes.statusCode).json(addUserRes.data);
+    if (!defaultUserstoreExists) {
+      return res.status(408).json({
+        error: "Timed out waiting for DEFAULT userstore to be provisioned",
+        message:
+          "The organization was created, but the DEFAULT userstore was not provisioned in time. Please try again later.",
+      });
     }
 
-    const userData = addUserRes.data;
-    const userId = userData.id;
+    // Step 6: Create user.
+    const { success, data, status } = await pollForUserCreation(
+      accessToken,
+      orgId,
+      firstName,
+      lastName,
+      email,
+      password
+    );
 
-    // Step 6: Get application ID
+    if (!success) {
+      return res.status(status).json({ error: data.error || "User creation failed" });
+    }
+
+    const userData = data;
+    const userId = data?.id;
+
+    // Step 7: Get application ID
     const appReq = {
       method: "POST",
       body: JSON.stringify({ accessToken, orgId }),
@@ -194,9 +202,8 @@ export default async function handler(
 
     const appId = appRes.data.applications[0].id;
 
-    // Step 7: Get admin role ID using the app ID as the aud value.
-    const adminRoleName =
-      getConfig().BusinessAdminAppConfig.ManagementAPIConfig.AdminRole;
+    // Step 8: Get admin role ID using the app ID as the aud value.
+    const adminRoleName = process.env.ADMIN_ROLE_NAME;
 
     const roleReq = {
       method: "POST",
@@ -219,6 +226,7 @@ export default async function handler(
       },
     } as unknown as NextApiResponse;
 
+    // Step 9: Get role ID.
     await getRole(roleReq, roleRes);
 
     if (
@@ -229,45 +237,28 @@ export default async function handler(
       return res.status(404).json({ error: "Admin role not found" });
     }
 
-    const roleId = roleRes.data.Resources[0].id;
+    const roleId = roleRes?.data?.Resources[0]?.id;
 
-    // Step 8: Assign admin role to user
-    const patchRoleReq = {
-      method: "POST",
-      body: JSON.stringify({
-        accessToken,
-        userId,
-        param: {
-          Operations: [
-            { op: "add", path: "users", value: [{ value: userId }] },
-          ],
-        },
-      }),
-      query: { roleId },
-    } as unknown as NextApiRequest;
+    // Step 10: Add user to the admin role.
+    const { success: rolePatchSuccess, data: rolePatchData, status: rolePatchstatus } = await pollforRolePatching(
+      accessToken,
+      roleId,
+      userId
+    );
 
-    const patchRoleRes = {
-      status: function (code) {
-        this.statusCode = code;
-        return this;
-      },
-      json: function (data) {
-        this.data = data;
-        return this;
-      },
-    } as unknown as NextApiResponse;
+    if (!rolePatchSuccess) {
+      return res.status(status).json({ error: data.error || "Adding user to role failed" });
+    }
 
-    await patchRole(patchRoleReq, patchRoleRes);
-
-    if (patchRoleRes.statusCode !== 200) {
-      return res.status(patchRoleRes.statusCode).json(patchRoleRes.data);
+    if (rolePatchstatus !== 200) {
+      return res.status(rolePatchstatus).json(rolePatchData);
     }
 
     return res.status(201).json({
       success: true,
       organization: orgData,
       user: userData,
-      roleAssignment: patchRoleRes.data,
+      roleAssignment: rolePatchData,
     });
   } catch (error) {
     console.error("Signup error:", error);

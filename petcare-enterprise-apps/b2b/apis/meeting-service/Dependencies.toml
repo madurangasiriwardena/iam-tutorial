@@ -9,7 +9,7 @@ distribution-version = "2201.11.0"
 
 [[package]]
 org = "WSO2"
-name = "channel_service"
+name = "meeting_service"
 version = "1.0.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
@@ -27,7 +27,7 @@ dependencies = [
 	{org = "ballerinax", name = "mysql.driver"}
 ]
 modules = [
-	{org = "WSO2", packageName = "channel_service", moduleName = "channel_service"}
+	{org = "WSO2", packageName = "meeting_service", moduleName = "meeting_service"}
 ]
 
 [[package]]
@@ -93,7 +93,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "http"
-version = "2.13.4"
+version = "2.13.5"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},

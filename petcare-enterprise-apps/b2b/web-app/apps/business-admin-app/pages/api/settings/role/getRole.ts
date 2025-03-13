@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
+ * Copyright (c) 2025, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
  *
  * WSO2 LLC. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -53,7 +53,14 @@ export default async function getRole(req: NextApiRequest, res: NextApiResponse)
           });
         const data = await fetchData.json();
 
-        res.status(200).json(data);
+        if (!fetchData.ok) {
+            console.log("errorData", data)
+            return res.status(fetchData.status).json(data);
+          }
+          
+          res.status(fetchData.status).json(data);
+
+        // res.status(200).json(data);
     } catch (err) {
 
         return dataNotRecievedError(res);

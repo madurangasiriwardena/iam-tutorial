@@ -24,7 +24,7 @@
         },
         "ApplicationConfig": {
             "HostedUrl": "http://localhost:3002",
-            "APIScopes": [
+            "APIScopes": [                      
                 "openid",
                 "email",
                 "profile",
@@ -40,6 +40,7 @@
                 "internal_org_user_mgt_update",
                 "internal_org_user_mgt_delete",
                 "internal_org_user_mgt_create",
+                "internal_org_userstore_view",
                 "internal_org_idp_view",
                 "internal_org_idp_create",
                 "internal_org_idp_update",

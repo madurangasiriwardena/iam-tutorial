@@ -48,9 +48,8 @@ interface ConfigObject {
       personalizationService?: string;
     };
     ManagementAPIConfig: {
-      SharedApplicationName: string,
-      UserStore: string,
-      AdminRole: string
+      SharedApplicationName: string;
+      UserStore: string;
     };
   };
 }
@@ -90,8 +89,7 @@ export function getConfig(): ConfigObject {
             },
             ManagementAPIConfig: {
                 SharedApplicationName: publicRuntimeConfig.sharedAppName,
-                UserStore: config.BusinessAdminAppConfig.ManagementAPIConfig.UserStore,
-                AdminRole: publicRuntimeConfig.AdminRole
+                UserStore: config.BusinessAdminAppConfig.ManagementAPIConfig.UserStore
             },
             resourceServerURLs: {
                 meetingService: publicRuntimeConfig.meetingServiceUrl,

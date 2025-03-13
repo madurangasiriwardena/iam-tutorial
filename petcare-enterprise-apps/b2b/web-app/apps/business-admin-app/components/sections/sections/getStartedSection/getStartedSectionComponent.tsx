@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2023, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
+ * Copyright (c) 2025, WSO2 LLC. (https://www.wso2.com). All Rights Reserved.
  *
  * WSO2 LLC. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -16,10 +16,8 @@
  * under the License.
  */
 
-import Image from "next/image";
 import { FlexboxGrid } from "rsuite";
 import GetStartedText from "./otherComponents/getStartedText";
-import getStartedImage from "../../../../../../libs/business-admin-app/ui/ui-assets/src/lib/images/getStarted.png";
 
 /**
  * 
@@ -28,14 +26,10 @@ import getStartedImage from "../../../../../../libs/business-admin-app/ui/ui-ass
 export default function GetStartedSectionComponent() {
 
     return (
-        <FlexboxGrid align="middle" justify="space-between" style={ { height: "100%" } }>
-            <FlexboxGrid.Item colspan={ 14 }>
+        <FlexboxGrid align="middle" style={ { height: "100%" } }>
+            <FlexboxGrid.Item style={ { flex: "1" } }>
                 <GetStartedText />
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item colspan={ 9 }>
-                <Image src={ getStartedImage } alt="profile image" width={ 500 } />
             </FlexboxGrid.Item>
         </FlexboxGrid>
     );
-
 }

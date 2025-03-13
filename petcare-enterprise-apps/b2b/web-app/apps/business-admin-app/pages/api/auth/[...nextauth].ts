@@ -94,8 +94,8 @@ const wso2ISProvider = (req: NextApiRequest, res: NextApiResponse) => NextAuth(r
             },
             clientId: process.env.CLIENT_ID,
             clientSecret: process.env.CLIENT_SECRET,
-            id: "wso2isAdmin",
-            name: "WSO2ISAdmin",
+            id: "asgardeo",
+            name: "asgardeo",
             profile(profile) {
 
                 return {

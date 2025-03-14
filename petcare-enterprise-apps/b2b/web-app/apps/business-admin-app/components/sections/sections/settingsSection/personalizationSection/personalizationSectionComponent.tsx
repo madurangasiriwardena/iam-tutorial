@@ -80,6 +80,9 @@ export default function PersonalizationSectionComponent(props: PersonalizationSe
 
     const fetchBrandingPreference = async () => {
         const res: BrandingPreference = (await controllerDecodeGetBrandingPreference(session) as BrandingPreference);
+        if (!res || !res["preference"]) {
+            return;
+        }
         const activeTheme: string = res["preference"]["theme"]["activeTheme"];
 
         setLogoUrl(res["preference"]["theme"][activeTheme]["images"]["logo"]["imgURL"]);
@@ -133,8 +136,10 @@ export default function PersonalizationSectionComponent(props: PersonalizationSe
                     .then(() => {
                         getPersonalization(session.orgId)
                             .then((response) => {
-                                personalize(response.data);
-                            });
+                                if (response && response.data) {
+                                    personalize(response.data);
+                                }
+                            })
                     });
                 fetchBrandingPreference();
             })

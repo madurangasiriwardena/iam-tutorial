@@ -63,7 +63,7 @@ export default function Home() {
                     personalize(response.data);
                 })
                 .catch(async (err) => {
-                    if (err.response.status === 404) {
+                    if (err.response?.status === 404) {
                         const defaultPersonalization: Personalization = {
                             faviconUrl: favicon.src,
                             logoAltText: "Teamspace App Logo",

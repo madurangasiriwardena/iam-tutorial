@@ -20,9 +20,16 @@ import { getPersonalizationInstance } from "./personalizationInstance";
 
 export async function getPersonalization(orgId: string) {
     // const headers = createHeaders(accessToken);
-    const response = await getPersonalizationInstance().get(`personalization/org/${orgId}`, {
-        headers: {}
-    });
-
-    return response;
+    try {
+        const response = await getPersonalizationInstance().get(`personalization/org/${orgId}`, {
+            headers: {}
+        });
+        return response;
+    } catch (error) {
+        if (error.response && error.response.status === 404) {
+            console.error(`Personalization data not found for orgId: ${orgId}`);
+            return null;
+        }
+        throw error;
+    }
 }

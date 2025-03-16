@@ -1,5 +1,4 @@
 import ballerina/http;
-import ballerina/mime;
 
 UserInfoResolver userInfoResolver = new;
 
@@ -93,31 +92,4 @@ service / on new http:Listener(9091) {
         }
         return http:NO_CONTENT;
     }
-}
-
-function handleContent(mime:Entity bodyPart) returns Thumbnail|error? {
-
-    var mediaType = mime:getMediaType(bodyPart.getContentType());
-    mime:ContentDisposition contentDisposition = bodyPart.getContentDisposition();
-    string fileName = contentDisposition.fileName;
-
-    if mediaType is mime:MediaType {
-
-        string baseType = mediaType.getBaseType();
-        if mime:IMAGE_JPEG == baseType || mime:IMAGE_GIF == baseType || mime:IMAGE_PNG == baseType {
-
-            byte[] bytes = check bodyPart.getByteArray();
-            byte[] base64Encoded = <byte[]>(check mime:base64Encode(bytes));
-            string base64EncodedString = check string:fromBytes(base64Encoded);
-
-            Thumbnail thumbnail = {
-                fileName: fileName,
-                content: base64EncodedString
-            };
-
-            return thumbnail;
-        }
-    }
-
-    return error("Unsupported media type found");
 }
